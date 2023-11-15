@@ -7,9 +7,10 @@ Review the Project 2 requirements and check out some [examples](https://romebell
 In this space below, list **THREE** ideas for your Project 2. For each idea, include [user stories](https://www.atlassian.com/agile/project-management/user-stories) for each idea and a link to the API(s) you want to use for it.
 
 --------------------------------------------------------
-1. 
-2. 
-3.
+1. Billy wants to be able to track all the games he owns so he doesn't buy duplicates
+2. Rachel wants to add a rating to her games so she can remember which ones are better
+3. Samir wants to see what games he's missing for a complete collection
+4. Kim wants to rank how desireable unowned games are and view only the top ones
 ---------------------------------------------------------
 
 Make a PR when you're done!
