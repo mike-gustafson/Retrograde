@@ -1,11 +1,15 @@
 {
   "development": {
-    "database": "express_auth_dev_1",
+    "user": "Mike",
+    "password": "Gust@fson316",
+    "database": "retrograde",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
-    "database": "express_auth_test_1",
+    "user": "Mike",
+    "password": "Gust@fson316",
+    "database": "retrograde",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },

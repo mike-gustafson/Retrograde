@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% let platformName = 'systemX' %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Games for <%= platformName %> (<%= games.length %> games)</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <% if (games.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <h1>List of Games for <%= platformName %> (<%= games.length %> games)</h1>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% games.forEach(game => { %>
+                    <tr>
+                        <td><%= game.name %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Sorry, there are no <%= platformName %> games in the database yet.</p>
+    <% } %>
+
+</body>
+</html>
+

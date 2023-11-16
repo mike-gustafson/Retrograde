@@ -32,11 +32,10 @@ In the space below:
 
 ----------------------------------------------------------
 ### Wireframes
-
+![Alt text](<VD5UMfz5XLXr (2).png>)
 ----------------------------------------------------------
 
 Make a PR when you're done!
-
 
 ## Requirements Inside `Project Board`
 

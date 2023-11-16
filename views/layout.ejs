@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <%- include('styles') %>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Authentication</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Retrograde</title>
   </head>
-  <body>
+  <body style="padding-top: 60px;">
+        <%- include('partials/navbar') %>
     <%- include('partials/alerts') %>
-
-    <% if (!currentUser) {%>
-      <li><a href="/auth/signup">Signup</a></li>
-      <li><a href="/auth/login">Login</a></li>
-    <% } else { %>
-        <li><a href="/auth/logout">Logout</a></li>
-        <li><a href="/profile">Profile</a></li>
-    <% } %>
-
+    <div id="teal-job-tracker-root-stable" style="z-index: 2147483647;"><iframe id="teal-job-tracker-iframe-stable" srcdoc="<!DOCTYPE html><html><head></head><body><div class=&quot;frame-root&quot;></div></body></html>" style="background: rgb(255, 255, 255) !important; width: 380px !important; height: 100vh !important; position: fixed !important; inset: 0px -380px auto auto !important; z-index: 2147483647 !important; border: 0px !important; box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 16px -3px !important; transition: right 0.25s ease-in-out 0s !important; transform: none !important;"></iframe></div><div id="teal-job-tracker-companion-root-stable" style="display: block; z-index: 2147483646; bottom: 58px; right: 0px; position: fixed; height: 60px;"></div></body>
     <%- body %> 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+
+    <%- include('scripts') %>
   </body>
 </html>
