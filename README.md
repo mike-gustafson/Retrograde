@@ -1,6 +1,8 @@
-# `Express Authentication`
+# `RetroGrade`
 
-Express authentication template using Passport + Flash messages + custom middleware
+Video Game collection tracker
+
+Track your collection, create top-10 lists, Share your wishlist with others, See which games your missing!
 
 ## What it includes
 
