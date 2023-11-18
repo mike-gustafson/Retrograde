@@ -1,0 +1,8 @@
+<h1>List of Games for <%= platform.name %> (<%= games.length %> games)</h1>
+
+<ul>
+    <% games.forEach(game => { %>
+      <li><%= game.name %></li>
+    <% }); %>
+  </ul>
+  

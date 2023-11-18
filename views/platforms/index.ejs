@@ -1,0 +1,77 @@
+<style>
+    .sidebar-container {
+      position: fixed;
+      top: 30;
+      left: 0;
+      height: 100vh;
+      width: 20vw;
+      overflow-y: auto; /* Enable vertical scrolling */
+      background-color: #f8f9fa; /* Adjust background color */
+    }
+  
+    #gamesList {
+      margin-top: 30px;
+  margin-left: 20vw; /* Adjust this value based on your layout */
+}
+  </style>
+  
+  <div class="sidebar-container">
+    <div class="accordion custom-accordion" id="platformAccordion">
+      <% platforms.sort((a, b) => {
+          if (!a.name && !b.name) return 0;
+          if (!a.name) return 1;
+          if (!b.name) return -1;
+          return a.name.localeCompare(b.name);
+      });
+  
+      let logoUrl;
+      platforms.forEach((platform, index) => {
+          if ((platform.category === 1 || platform.category === 5) && platform.platformLogo) {
+              if (platform.platformLogo) {
+                  logoUrl = platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg', 'png');
+                  if (logoUrl) {
+                      logoUrl = logoUrl.replace('t_thumb', 't_720p');
+                  }
+              } else {
+                  logoUrl = '';
+              }
+          } else {
+              logoUrl = '';
+          }
+      %>
+  
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading<%= index %>">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="false" aria-controls="collapse<%= index %>" onclick="loadGames(<%= platform.id %>)">
+            <%= platform.name %>
+          </button>
+        </h2>
+        <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#platformAccordion">
+          <div class="accordion-body">
+              <% if (logoUrl) { %>
+                <img src="http:<%= logoUrl %>" alt="No logo available" class="img-fluid platform-logo">
+              <% } else { %>
+                <div class="placeholder-logo"><%= platform.name %></div>
+              <% } %>
+          </div>
+        </div>
+      </div>
+  
+      <% }) %>
+    </div>
+  </div>
+  
+
+  <div id="gamesList"></div>
+
+  <script>
+  async function loadGames(platformId) {
+    try {
+      const response = await fetch(`/platforms/${platformId}/games`);
+      const gamesHtml = await response.text();
+      document.getElementById('gamesList').innerHTML = gamesHtml;
+    } catch (error) {
+      console.error('Error loading games:', error);
+    }
+  }
+</script>

@@ -19,8 +19,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(layouts);
 app.use(flash());            // flash middleware
 
-app.use('/platforms', require('./controllers/platforms'));
-app.use('/games', require('./controllers/games'));
+
 
 app.use(session({
   secret: process.env.SECRET_SESSION,    // What we actually will be giving the user on our site as a session cookie
@@ -38,6 +37,10 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
+
+app.use('/platforms', require('./controllers/platforms'));
+app.use('/games', require('./controllers/games'));
+
 
 app.get('/', (req, res) => {
   res.render('index');

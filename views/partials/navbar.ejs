@@ -28,7 +28,14 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         <input class="form-control mr-sm-2" id="searchbox" type="text" placeholder="Search" aria-label="Search">
       </form>
-      
+      <% if (!currentUser) {%>
+        <li><a href="/auth/signup">Signup</a></li>
+        <li><a href="/auth/login"><button id="loginButton" class="btn btn-primary">Login</button>
+        </a></li>
+      <% } else { %>
+          <li><a href="/auth/logout">Logout</a></li>
+          <li><a href="/profile">Profile</a></li>
+      <% } %>
     </div>
 
   </nav>
