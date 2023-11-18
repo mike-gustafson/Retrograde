@@ -41,8 +41,37 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Password must be between 8 and 99 characters"
         }
       }
-    }
-  }, {
+    },
+    games_followed: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true,
+    },
+    games_owned: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true,
+    },  
+    games_wishlist: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true,
+    },
+    games_ratings: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true,
+    },
+    platforms_ranked: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true,
+    },
+    platforms_followed: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true,
+    },
+    platforms_owned: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+    },
+    platforms_wishlist: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+    },
     sequelize,
     modelName: 'user',
   });

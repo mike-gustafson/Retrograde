@@ -61,7 +61,6 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false, // Disable timestamps (createdAt and updatedAt)
   });
 
-  // Additional hooks, methods, or validations specific to Platform model can be added here
 
   return Platform;
 };

@@ -8,9 +8,17 @@ In this space below, list **THREE** ideas for your Project 2. For each idea, inc
 
 --------------------------------------------------------
 1. Billy wants to be able to track all the games he owns so he doesn't buy duplicates
+    * data: User ID, Users games, Users games copies
+    * method: display a sortable and searchable list of games marked "owned" by user
 2. Rachel wants to add a rating to her games so she can remember which ones are better
+    * data: User ID, User games, User game ratings
+    * method: display a sortable and searchable list of games marked "owned" by user with ability to rate games
 3. Samir wants to see what games he's missing for a complete collection
+    * data: ID of game owned, All games w/ matching console ID, Desired platforms
+    * method: display a list of desired platforms propagated w/ games that aren't on user owned list
 4. Kim wants to rank how desireable unowned games are and view only the top ones
+    * data: User ID, User wishlist, User Desired List
+    * method: display a list of all games on user "wishlist".  User can change order to reflect desireablility of titles
 ---------------------------------------------------------
 
 Make a PR when you're done!
@@ -26,7 +34,7 @@ In the space below:
 
 ----------------------------------------------------------
 ### ERD
-
+![Alt text](<retrograde - erd.jpeg>)
 ----------------------------------------------------------
 ### User Stories
 
