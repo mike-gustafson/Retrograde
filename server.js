@@ -8,7 +8,6 @@ const passport = require('./config/ppConfig');
 const isLoggedIn = require('./middleware/isLoggedIn');
 const path = require('path');
 
-// environment variables
 SECRET_SESSION = process.env.SECRET_SESSION;
 
 app.set('view engine', 'ejs');
@@ -18,11 +17,10 @@ app.use(require('morgan')('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 app.use(layouts);
+app.use(flash());            // flash middleware
 
 app.use('/platforms', require('./controllers/platforms'));
 app.use('/games', require('./controllers/games'));
-
-app.use(flash());            // flash middleware
 
 app.use(session({
   secret: process.env.SECRET_SESSION,    // What we actually will be giving the user on our site as a session cookie
@@ -47,18 +45,14 @@ app.get('/', (req, res) => {
 
 app.use('/auth', require('./controllers/auth'));
 
-// Add this below /auth controllers
 app.get('/profile', isLoggedIn, (req, res) => {
   const { id, name, email } = req.user.get(); 
   res.render('profile', { id, name, email });
 });
 
-
-
-
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
-  console.log(`Cartridge inserted in port ${PORT}, insert coin to play!`);
+  console.log(`Cartridge inserted in slot ${PORT}, insert coin to play!`);
 });
 
 module.exports = server;

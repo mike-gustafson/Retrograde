@@ -1,13 +1,13 @@
 {
   "development": {
-    "user": "Mike",
+    "username": "Mike",
     "password": "Gust@fson316",
     "database": "retrograde",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
-    "user": "Mike",
+    "username": "Mike",
     "password": "Gust@fson316",
     "database": "retrograde",
     "host": "127.0.0.1",

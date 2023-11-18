@@ -7,9 +7,19 @@
     <title>Retrograde</title>
   </head>
   <body style="padding-top: 60px;">
-        <%- include('partials/navbar') %>
     <%- include('partials/alerts') %>
-    <div id="teal-job-tracker-root-stable" style="z-index: 2147483647;"><iframe id="teal-job-tracker-iframe-stable" srcdoc="<!DOCTYPE html><html><head></head><body><div class=&quot;frame-root&quot;></div></body></html>" style="background: rgb(255, 255, 255) !important; width: 380px !important; height: 100vh !important; position: fixed !important; inset: 0px -380px auto auto !important; z-index: 2147483647 !important; border: 0px !important; box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 16px -3px !important; transition: right 0.25s ease-in-out 0s !important; transform: none !important;"></iframe></div><div id="teal-job-tracker-companion-root-stable" style="display: block; z-index: 2147483646; bottom: 58px; right: 0px; position: fixed; height: 60px;"></div></body>
+    <%- include('partials/navbar') %>
+  
+
+    <% if (!currentUser) {%>
+      <li><a href="/auth/signup">Signup</a></li>
+      <li><a href="/auth/login">Login</a></li>
+    <% } else { %>
+        <li><a href="/auth/logout">Logout</a></li>
+        <li><a href="/profile">Profile</a></li>
+    <% } %>
+
+    
     <%- body %> 
 
     <%- include('scripts') %>
