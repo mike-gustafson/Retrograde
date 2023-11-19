@@ -2,6 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const layouts = require('express-ejs-layouts');
 const app = express();
+app.use(express.json());
+const { Game, Platform, user } = require('./models');
+
+
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('./config/ppConfig');
@@ -48,10 +52,15 @@ app.get('/', (req, res) => {
 
 app.use('/auth', require('./controllers/auth'));
 
-app.get('/profile', isLoggedIn, (req, res) => {
+app.get('/profile', isLoggedIn, async (req, res) => {
   const { id, name, email } = req.user.get(); 
-  res.render('profile', { id, name, email });
-});
+  const useracct = await user.findOne({
+    where: { 
+      id: req.user.id }
+    });
+
+  res.render('profile', { id, name, email, user: useracct});
+  })
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

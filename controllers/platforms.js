@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 router.get('/:platformId/games', async (req, res) => {
   try {
     const platformId = req.params.platformId;
-
+    const loggedInUser = req.user;
     let platform = {};
     if (req.query.platformName) {
       platform.name = req.query.platformName;
@@ -32,11 +32,10 @@ router.get('/:platformId/games', async (req, res) => {
         platforms: [platformId],
       },
     });
-    res.render('games/_list', { games, platform });
+    res.render('games/_list', { user: loggedInUser, games, platform });
   } catch (error) {
     console.error('Error fetching games:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 module.exports = router;

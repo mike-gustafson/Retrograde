@@ -2,8 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { Game, Platform } = require('../models');
-const passport = require('../config/ppConfig');
+const { Game, Platform, user } = require('../models');
 
 router.get("/", async (req, res) => {
   try {
@@ -54,5 +53,30 @@ router.get('/:platformId', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.post('/add-to-collection', async (req, res) => {
+  const { userId, gameId, platformId } = req.body;
+  try {
+    let useracct = await user.findOne({where: { id: userId }});
+        
+    if (!useracct.games_owned) {
+      useracct.games_owned = {};
+    }
+    if (!useracct.games_owned[platformId]) {
+      useracct.games_owned[platformId] = [gameId];
+    } else {
+      useracct.games_owned[platformId].push(gameId);
+    }
+    useracct.changed('games_owned', true)
+    await useracct.save();
+    console.log(useracct.name,'owns',useracct.games_owned)
+    return res.status(200).json({ success: true, message: 'Game added to collection' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 module.exports = router;

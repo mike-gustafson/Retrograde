@@ -1,8 +1,35 @@
+
+
 <h1>List of Games for <%= platform.name %> (<%= games.length %> games)</h1>
 
-<ul>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Copies Owned</th>
+      <th>Wishlist</th>
+      <th>Do Not Want</th>
+    </tr>
+  </thead>
+  <tbody>
     <% games.forEach(game => { %>
-      <li><%= game.name %></li>
+      <tr>
+        <td><%= game.name %></td>
+        <td>
+          <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
+            Yes
+          <% } else { %>
+            <% if (user) { %>
+              <button onclick="console.log(<%= user.id %>, <%= game.id %>, <%= platform.id %>); addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Add to Collection</button>
+              <% } else { %>
+              <!-- User not logged in, handle accordingly -->
+            <% } %>
+          <% } %>
+        </td>
+        <td><input type="checkbox" <%= user && user.games_wishlist && user.games_wishlist.includes(game.id) ? 'checked' : '' %> ></td>
+        <td></td> <!-- Placeholder for "Do Not Want" column -->
+      </tr>
     <% }); %>
-  </ul>
-  
+  </tbody>
+</table>
+
