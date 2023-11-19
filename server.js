@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const layouts = require('express-ejs-layouts');
+const fs = require('fs');
 const app = express();
 app.use(express.json());
 const { Game, Platform, user } = require('./models');
@@ -41,16 +42,15 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
-
 app.use('/platforms', require('./controllers/platforms'));
 app.use('/games', require('./controllers/games'));
-
+app.use('/auth', require('./controllers/auth'));
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('homepage');
 })
 
-app.use('/auth', require('./controllers/auth'));
+
 
 app.get('/profile', isLoggedIn, async (req, res) => {
   const { id, name, email } = req.user.get(); 
@@ -85,8 +85,24 @@ app.get('/profile', isLoggedIn, async (req, res) => {
       }
     }
 
-    res.render('profile', { id, name, email, user: useracct, userGames, uniqueGames });
+    res.render('profile/profile', { id, name, email, user: useracct, userGames, uniqueGames });
   })
+
+  app.get('/quotes', async (req, res) => {
+      const filePath = path.join(__dirname, 'data', 'quotes.json');
+      console.log(filePath)
+      const quotes = await fs.readFile(filePath, 'utf-8', (err, data) => {
+        if (err) {
+          console.log(err);
+        } else {
+          let quotes = JSON.parse(data);
+          const randomIndex = Math.floor(Math.random() * quotes.length);
+          const randomQuote = quotes[randomIndex];
+          res.json({ quote: randomQuote.quote, attrib: randomQuote.attrib });
+        }
+      });
+      
+  });
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

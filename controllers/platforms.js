@@ -9,6 +9,12 @@ router.get("/", async (req, res) => {
               category: [1, 5],
             },
           });
+          platforms.sort((a, b)=> {
+            if (!a.name && !b.name) return 0;
+            if (!a.name) return 1;
+            if (!b.name) return -1;
+            return a.name.localeCompare(b.name);
+            });
           const platformLogos = await PlatformLogo.findAll();
           res.render("platforms/index", { platforms, platformLogos});
     } catch (err) {
