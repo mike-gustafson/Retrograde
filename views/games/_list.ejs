@@ -1,6 +1,4 @@
-
-
-<h1>List of Games for <%= platform.name %> (<%= games.length %> games)</h1>
+<h1>Games for <%= platform.name %> (<%= games.length %> games)</h1>
 
 <table>
   <thead>
@@ -12,24 +10,26 @@
     </tr>
   </thead>
   <tbody>
-    <% games.forEach(game => { %>
+    <% games.forEach(game=> { %>
       <tr>
-        <td><%= game.name %></td>
+        <td>
+          <%= game.name %>
+        </td>
         <td>
           <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
-            Yes
+            <%= user.games_owned[platform.id].filter(id => id === game.id).length %> owned  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>);">+1</button>
           <% } else { %>
             <% if (user) { %>
-              <button onclick="console.log(<%= user.id %>, <%= game.id %>, <%= platform.id %>); addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Add to Collection</button>
-              <% } else { %>
+              <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>);">Add to Collection</button>
+            <% } else { %>
               <!-- User not logged in, handle accordingly -->
             <% } %>
           <% } %>
         </td>
-        <td><input type="checkbox" <%= user && user.games_wishlist && user.games_wishlist.includes(game.id) ? 'checked' : '' %> ></td>
+        <td><input type="checkbox" <%=user && user.games_wishlist && user.games_wishlist.includes(game.id) ? 'checked'
+            : '' %> ></td>
         <td></td> <!-- Placeholder for "Do Not Want" column -->
       </tr>
-    <% }); %>
+      <% }); %>
   </tbody>
 </table>
-

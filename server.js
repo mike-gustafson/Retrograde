@@ -58,8 +58,34 @@ app.get('/profile', isLoggedIn, async (req, res) => {
     where: { 
       id: req.user.id }
     });
+    const userGames = [];
+    let uniqueGames = 0;
 
-  res.render('profile', { id, name, email, user: useracct});
+    for (const platformId in useracct.games_owned) {
+      const games = useracct.games_owned[platformId];
+      const platform = await Platform.findByPk(platformId);
+      
+      const gameCounts = games.reduce((acc, gameId) => {
+        acc[gameId] = (acc[gameId] || 0) + 1;
+        return acc;
+      }, {});
+      // Fetch the names of games
+      for (const gameId in gameCounts) {
+        const game = await Game.findByPk(gameId);
+        if (gameCounts[gameId] === 1) {
+          const gameNameWithCount = game.name;
+          userGames.push({ platform: platform.name, game: gameNameWithCount });
+          uniqueGames++;
+        } else {
+          const gameNameWithCount = `(${gameCounts[gameId]}) ${game.name}`;
+          userGames.push({ platform: platform.name, game: gameNameWithCount });
+          uniqueGames++;
+        }
+        
+      }
+    }
+
+    res.render('profile', { id, name, email, user: useracct, userGames, uniqueGames });
   })
 
 const PORT = process.env.PORT || 3000;
