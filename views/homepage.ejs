@@ -1,17 +1,33 @@
 <div class="container-fluid">
     <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 0%; top: 0px;">
-                <div class="card p-1">
-                    <section class="text-white">
+                <div class="card p-1 mb-4">
+                    <section class="text-white p-1">
                         <h2>Get Started!</h2>
                         <p>Embark on your journey into retro gaming today. Explore our vast collection, discover hidden treasures,
                             and relive the magic of classic gaming!</p>
                         <a href="/platforms">Explore Platforms</a>, Find you favorite games, Track your collection, and more!
                     </section>
                 </div>
+                <div class="card p-1">
+                    <section class="text-white p-1">
+                        <h2>Technology Used</h2>
+                            <p>RetroGrade is built using the latest technologies to provide a seamless and enjoyable experience:</p>
+                            <ul>
+                                <li>Node.js for server-side scripting: Utilizing the power of Node.js for efficient server-side
+                                    operations.</li>
+                                <li>Express.js for web application framework: Employing Express.js to create a robust and scalable web
+                                    application framework.</li>
+                                <li>Sequelize as the ORM for handling database interactions: Leveraging Sequelize to streamline database
+                                    operations and enhance data management.</li>
+                                <li>Bootstrap for responsive and stylish UI components: Implementing Bootstrap for a visually appealing
+                                    and responsive user interface.</li>
+                            </ul>
+                        </section>
+                </div>
         </div>
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">
-                <div class="card p-1">
+                <div class="card p-1 mb-4">
                     <section class="text-white">
                         <h2>Explore Retro Gaming</h2>
                         <p>RetroGrade brings together an extensive collection of classic games and platforms, providing users with a
@@ -19,9 +35,25 @@
                             timeless favorites.</p>
                     </section>
                 </div>
+                <div class="card p-1 mb-4">
+                    <section class="text-white p-1">
+                        <h2>Key Features</h2>
+                        <ul>
+                            <li>Discover a vast library of retro games: Explore a curated selection of classic games, ranging from
+                                iconic titles to hidden gems.</li>
+                            <li>Explore platforms from gaming history: Dive into the diverse world of gaming platforms that shaped
+                                the history of video games.</li>
+                            <li>Build your wishlist and track your gaming collection: Use RetroGrade to organize and manage your
+                                retro gaming collection effortlessly.</li>
+                        </ul>
+                    </section>
+                </div>
+                <div class="card p-1">
+                    <section class="text-white" id="quoteContainer"></section>
+                </div>
         </div>
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">
-                <div class="card">
+                <div class="card p-1">
                     <section class="text-white">
                             <div class="mb-md-5 mt-md-4 card-body p-5 text-center">
                                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
@@ -41,49 +73,11 @@
                                     <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></br>
                                         <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
                                     </p>
-                                    <p class="mb-0">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a>
+                                    <p class="mb-0">Don't have an account? <a href="auth/signup" class="text-white-50 fw-bold">Sign Up</a>
                                     </p>
                                 </form>
                             </div>
                     </section>
-                </div>
-        </div>
-        <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: opx;">
-                <div class="card p-1">
-                    <section class="text-white">
-                        <h2>Technology Used</h2>
-                            <p>RetroGrade is built using the latest technologies to provide a seamless and enjoyable experience:</p>
-                            <ul>
-                                <li>Node.js for server-side scripting: Utilizing the power of Node.js for efficient server-side
-                                    operations.</li>
-                                <li>Express.js for web application framework: Employing Express.js to create a robust and scalable web
-                                    application framework.</li>
-                                <li>Sequelize as the ORM for handling database interactions: Leveraging Sequelize to streamline database
-                                    operations and enhance data management.</li>
-                                <li>Bootstrap for responsive and stylish UI components: Implementing Bootstrap for a visually appealing
-                                    and responsive user interface.</li>
-                            </ul>
-                        </section>
-                </div>
-        </div>
-        <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 0%; top: 0px;">
-                <div class="card p-1">
-                    <section class="text-white">
-                        <h2>Key Features</h2>
-                        <ul>
-                            <li>Discover a vast library of retro games: Explore a curated selection of classic games, ranging from
-                                iconic titles to hidden gems.</li>
-                            <li>Explore platforms from gaming history: Dive into the diverse world of gaming platforms that shaped
-                                the history of video games.</li>
-                            <li>Build your wishlist and track your gaming collection: Use RetroGrade to organize and manage your
-                                retro gaming collection effortlessly.</li>
-                        </ul>
-                    </section>
-                </div>
-        </div>
-        <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">
-                <div class="card p-1">
-                    <section class="text-white" id="quoteContainer"></section>
                 </div>
         </div>
     </div>
@@ -98,22 +92,14 @@
             const response = await fetch('/quotes');
             const data = await response.json();
             document.getElementById('quoteContainer').innerHTML = `
-                <blockquote class="blockquote p-1" >
-                    <h3>${data.quote}</h3>
-                </blockquote>
-                <figcaption class="blockquote-footer mb-0 text-white">
-                    ${data.attrib}
-                </figcaption>
+                <blockquote class="blockquote p-1" ><h3>${data.quote}</h3></blockquote>
+                <figcaption class="blockquote-footer mb-0 text-white">${data.attrib}</figcaption>
             `;
         } catch (error) {
             console.error('Error fetching quote:', error);
         }
     }
-
-    // Initial update
     updateQuote();
-
-    // Set interval to update the quote every 30 seconds
     setInterval(updateQuote, 30000);
 </script>
 

@@ -1,11 +1,21 @@
 <% if (alerts.error) { %>
-    <% alerts.error.forEach(msg => { %>
-        <div class="alert alert-danger"><%= msg %></div>
+    <% alerts.error.forEach((msg, index) => { %>
+        <div class="alert alert-danger m-0" id="error-alert-${index}"><%= msg %></div>
+        <script>
+            setTimeout(function() {
+                document.getElementById("error-alert-${index}").style.display = 'none';
+            }, 5000);
+        </script>
    <% }) %>
 <% } %>
 
 <% if (alerts.success) { %>
-    <% alerts.success.forEach(msg => { %>
-        <div class="alert alert-success"><%= msg %></div>
+    <% alerts.success.forEach((msg, index) => { %>
+        <div class="alert alert-success m-0" id="success-alert-${index}"><%= msg %></div>
+        <script>
+            setTimeout(function() {
+                document.getElementById("success-alert-${index}").style.display = 'none';
+            }, 3000);
+        </script>
    <% }) %>
 <% } %>
