@@ -46,7 +46,6 @@ router.get('/:platformId', async (req, res) => {
         platforms: [platformId]
       },
     });
-    // Render the "hardware/games" view with the fetched data
     res.render("games/index", { games, platform });
   } catch (err) {
     console.error(err);
@@ -69,14 +68,11 @@ router.post('/add-to-collection', async (req, res) => {
     }
     useracct.changed('games_owned', true)
     await useracct.save();
-    console.log(useracct.name,'owns',useracct.games_owned)
     return res.status(200).json({ success: true, message: 'Game added to collection' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
 
 module.exports = router;

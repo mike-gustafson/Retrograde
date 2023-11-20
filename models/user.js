@@ -71,7 +71,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     platforms_wishlist: {
       type: DataTypes.ARRAY(DataTypes.INTEGER),
-    },},{
+    },
+  },
+  {
     sequelize,
     modelName: 'user',
   });

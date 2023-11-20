@@ -74,12 +74,24 @@
     </div>
     <div class="col-sm-6 col-lg-6 mb-3" style="position: absolute; left: 0%; top: 0px;">
       <div class="card p-1">
-        <section class="p-1 table-responsive" style="max-height: 100em; scroll;">
+        <section class="p-1 table-responsive" style="max-height: 100em; overflow-y: scroll">
+          
           <h6 class="d-flex align-items-center mb-3">
             <i class="material-icons text-info mr-2">Collection</i>
             <%= uniqueGames %> Different Titles Owned
           </h6>
-          <table class="table-dark table-bordered table-striped">
+          <div class="d-flex justify-content-end mb-2">
+            <label for="platformFilter" class="mr-2 text-white">Filter by Platform:</label>
+            <select id="platformFilter" class="form-select" onchange="filterTable()">
+              <option value="all">All</option>
+              <!-- Add options dynamically based on available platforms -->
+              <% const uniquePlatforms = [...new Set(userGames.map(game => game.platform))] %>
+              <% for (const platform of uniquePlatforms) { %>
+                <option value="<%= platform %>"><%= platform %></option>
+              <% } %>
+            </select>
+          </div>
+          <table class="table-dark table-bordered table-striped" id="gameTable">
             <thead>
               <tr>
                 <th>Platform</th>
@@ -88,7 +100,7 @@
             </thead>
             <tbody>
               <% for (const gameDetails of userGames) { %>
-                <tr class="text-secondary">
+                <tr class="text-secondary" data-platform="<%= gameDetails.platform %>">
                   <td>
                     <%= gameDetails.platform %>
                   </td>
@@ -152,3 +164,21 @@
         </section>
       </div>
     </div>
+
+    <script>
+      function filterTable() {
+        const platformFilter = document.getElementById('platformFilter').value;
+        const rows = document.getElementById('gameTable').rows;
+    
+        for (let i = 1; i < rows.length; i++) {
+      const platformCell = rows[i].cells[0];
+      const platformValue = platformCell.textContent.trim();
+      
+      if (platformFilter === 'all' || platformValue === platformFilter) {
+        rows[i].style.display = '';
+      } else {
+        rows[i].style.display = 'none';
+      }
+    }
+      }
+    </script>
