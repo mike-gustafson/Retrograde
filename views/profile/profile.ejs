@@ -76,13 +76,12 @@
       <div class="card p-1">
         <section class="p-1 table-responsive" style="max-height: 100em; overflow-y: scroll">
           
-          <h6 class="d-flex align-items-center mb-3">
+          <h6 class="d-flex align-items-center mb-1">
             <i class="material-icons text-info mr-2">Collection</i>
-            <%= uniqueGames %> Different Titles Owned
-          </h6>
-          <div class="d-flex justify-content-end mb-2">
-            <label for="platformFilter" class="mr-2 text-white">Filter by Platform:</label>
-            <select id="platformFilter" class="form-select" onchange="filterTable()"  style="width: 50%;"">
+            <%= uniqueGames %> Titles
+          
+          <div class="d-flex justify-content-right mb-2" style="width: 100%; justify-content: right;">
+            <select id="platformFilter" class="form-select" onchange="filterTable()"  style="width: 40%;">
               <option value="all">All</option>
               <!-- Add options dynamically based on available platforms -->
               <% const uniquePlatforms = [...new Set(userGames.map(game => game.platform))] %>
@@ -91,7 +90,10 @@
               <% } %>
             </select>
           </div>
-          <table class="table-dark table-bordered table-striped" id="gameTable">
+        </h6>
+          <table class="table-dark table-bordered table-striped" id="gameTable" style="width: 100%;">
+            <col style="width:25%">
+            <col style="width:75%">
             <thead>
               <tr>
                 <th>Platform</th>

@@ -14,7 +14,7 @@ In this space below, list **THREE** ideas for your Project 2. For each idea, inc
 2. Rachel wants to add a rating to her games so she can remember which ones are better
     * data: User ID, User games, User game ratings
     * method: display a sortable and searchable list of games marked "owned" by user with ability to rate games
-    *notes: top rated games should appear on user profile.
+    * notes: top rated games should appear on user profile.
 3. Samir wants to see what games he's missing for a complete collection
     * data: ID of game owned, All games w/ matching console ID, Desired platforms
     * method: display a list of desired platforms propagated w/ games that aren't on user owned list
