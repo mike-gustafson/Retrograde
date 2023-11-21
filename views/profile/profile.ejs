@@ -82,7 +82,7 @@
           </h6>
           <div class="d-flex justify-content-end mb-2">
             <label for="platformFilter" class="mr-2 text-white">Filter by Platform:</label>
-            <select id="platformFilter" class="form-select" onchange="filterTable()">
+            <select id="platformFilter" class="form-select" onchange="filterTable()"  style="width: 50%;"">
               <option value="all">All</option>
               <!-- Add options dynamically based on available platforms -->
               <% const uniquePlatforms = [...new Set(userGames.map(game => game.platform))] %>
