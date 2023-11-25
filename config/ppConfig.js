@@ -2,14 +2,14 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // Database
-const { user } = require('../models');
+const { User } = require('../models');
 
 const STRATEGY = new LocalStrategy({
     usernameField: 'email',         // looks for an email field as the username
     passwordField: 'password'       // looks for an password field as the password
     }, async (email, password, cb) => {
         try {
-            const foundUser = await user.findOne({
+            const foundUser = await User.findOne({
                 where: { email }
             });
 
@@ -31,7 +31,7 @@ passport.serializeUser((user, cb) => {
 
 passport.deserializeUser(async (id, cb) => {
     try {
-        const foundUser = await user.findByPk(id);
+        const foundUser = await User.findByPk(id);
 
         if (foundUser) {
             cb(null, foundUser);

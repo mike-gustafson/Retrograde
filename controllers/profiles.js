@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { Platform, user, Game } = require('../models');
+const { Platform, User, Game } = require('../models');
 const isLoggedIn = require('../middleware/isLoggedIn');
 
 router.get('/', isLoggedIn, async (req, res) => {
     const { id, name, email } = req.user.get();
-    const useracct = await user.findOne({
+    const useracct = await User.findOne({
         where: {
             id: req.user.id
         }
@@ -33,6 +33,7 @@ router.get('/', isLoggedIn, async (req, res) => {
         }
         
     }
+    console.log(userGames);
     res.render('profile/profile', { id, name, email, user: useracct, userGames, uniqueGames });
 })
 

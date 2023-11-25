@@ -3,7 +3,7 @@
 <ul>
   <% games.forEach(game => { %>
     <li>
-      <a href="/games/<%= game.id %>">
+      <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
         <%= game.name %>
       </a>
     </li>

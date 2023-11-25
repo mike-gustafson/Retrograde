@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const fs = require('fs');
 const express = require('express');
 const flash = require('connect-flash');
 const session = require('express-session');
 const layouts = require('express-ejs-layouts');
+const methodOverride = require('method-override')
 
 const app = express();
 const path = require('path');
@@ -15,6 +15,7 @@ app.use(layouts);
 app.use(flash());
 app.use(express.json());
 app.use(require('morgan')('dev'));
+app.use(methodOverride('_method'));
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: false }));
 
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/quotes', require('./controllers/random-quotes'));
 app.use('/platforms', require('./controllers/platforms'));
 app.use('/profile', require('./controllers/profiles'));
 app.use('/games', require('./controllers/games'));
@@ -48,20 +50,7 @@ app.get('/', (req, res) => {
   res.render('homepage');
 })
 
-app.get('/quotes', async (req, res) => { 
-  const filePath = path.join(__dirname, 'data', 'quotes.json');
-  const getQuotes = await fs.readFile(filePath, 'utf-8', (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      let quotes = JSON.parse(data);
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      res.json({ quote: quotes[randomIndex].quote, attrib: quotes[randomIndex].attrib });
-    }
-  });  
-});
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
   console.log(`Cartridge inserted in slot ${PORT}, insert coin to play!`);
 });

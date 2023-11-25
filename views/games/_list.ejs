@@ -21,13 +21,19 @@
   </thead>
   <tbody>
     <% games.forEach(game=> { %>
-      <tr style="border-bottom: 1px solid aqua;">
+      <tr style="border-bottom: 1px solid aqua;" id="<%= game.id %>">        
         <td style="width: 75%">
-          <%= game.name %>
+          <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
+            <%= game.name %>
+          </a>
         </td>
-        <td>
+        <td class="copies-owned-column">
           <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
-            <%= user.games_owned[platform.id].filter(id => id === game.id).length %> owned  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>);">+1</button>
+            <% let copyCount = 1; %>
+            <% console.log(copyCount) %>
+            <% copyCount = user.games_owned[platform.id].filter(id => id === game.id).length %>
+            <% console.log(copyCount) %>
+            <%= copyCount %> owned  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">+1</button>
           <% } else { %>
             <% if (user) { %>
               <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>);">Add to Collection</button>

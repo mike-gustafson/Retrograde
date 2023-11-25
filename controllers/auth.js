@@ -33,7 +33,7 @@ router.post('/login', passport.authenticate('local', {
 router.post('/signup', async (req, res) => {
   const { email, name, password } = req.body;
   try {
-    const [_user, created] = await user.findOrCreate({
+    const [_user, created] = await User.findOrCreate({
         where: { email },
         defaults: { name, password }
     });

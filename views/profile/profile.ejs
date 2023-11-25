@@ -106,13 +106,24 @@
                   <td>
                     <%= gameDetails.platform %>
                   </td>
-                  <td>
+                  <td>          
+                    <a href="/games/byId/<%= gameDetails.id %>/?_method=PUT" method="POST">
                     <%= gameDetails.game %>
+                  </a>
                   </td>
                 </tr>
                 <% } %>
             </tbody>
           </table>
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <!-- Add more page items as needed -->
+              <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+            </ul>
+          </nav>
         </section>
       </div>
     </div>
@@ -183,4 +194,22 @@
       }
     }
       }
+
+      document.addEventListener('DOMContentLoaded', function () {
+    // Your existing logic...
+
+    // Initialize Bootstrap Table and Pagination
+    var gameTable = new bootstrapTable.BootstrapTable(document.getElementById('gameTable'), {
+      pagination: true,
+      pageSize: 20,  // Set the number of rows per page
+      pageList: [10, 20, 50],  // Set available page sizes
+      sidePagination: 'client',  // 'client' for client-side, 'server' for server-side
+    });
+
+    // Handle pagination event
+    gameTable.$el.addEventListener('page-change.bs.table', function (e, number, size) {
+      // Handle pagination logic here, e.g., fetch and display the corresponding data
+      console.log('Current page:', number, 'Page size:', size);
+    });
+  });
     </script>

@@ -35,7 +35,7 @@ router.get('/:platformId/games', async (req, res) => {
     }
     const games = await Game.findAll({
       where: {
-        platforms: [platformId],
+        platforms: [platformId,],
       },
     });
     res.render('games/_list', { user: loggedInUser, games, platform });

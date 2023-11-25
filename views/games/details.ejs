@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <div class="row" style="position: relative; height: 690px;">
+        <div class="col-sm-6 col-lg-4 mb-4" style=" top: 20px;">
+            <div class="card p-1 mb-4">
+                <% let coverId=game.cover; let coverUrl; if (game.cover) { coverUrl=cover.url.replace('jpg', 'png' ); }
+                    if (coverUrl) { coverUrl=coverUrl.replace('t_thumb', 't_720p' ); } %>
+                    
+
+                <img src="<%= coverUrl %> " class="card-img-top" alt="<%= game.name %> Image" style=" width: 400px; height: auto;">
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-8 mb-4" style=" top: 20px;">
+            <div class="card p-1 mb-4">
+                <section class="text-white p-1">
+                    <h2>
+                        <%= game.name %>
+                    </h2>
+                    <p>
+                        <%= game.summary %>
+                    </p>
+                    <p><strong>Genres:</strong>
+                        <%= game.genres %>
+                    </p>
+                    <p><strong>Platforms:</strong>
+                        <%= game.platforms %>
+                    </p>
+                    <p><strong>Release Date:</strong>
+                        <%= new Date(game.first_release_date * 1000).toLocaleDateString() %>
+                    </p>
+                    <a href="<%= game.url %>" class="btn btn-primary">Learn More</a>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+</div>
