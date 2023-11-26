@@ -1,22 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const { Platform, PlatformLogo, Game } = require('../models');
+const sortData = require('../utils/sort-data.util');
+
 
 router.get("/", async (req, res) => {
     try {
         const platforms = await Platform.findAll({
-            where: {
-              category: [1, 5],
-            },
+            where: { category: [1, 5], },
           });
-          platforms.sort((a, b)=> {
-            if (!a.name && !b.name) return 0;
-            if (!a.name) return 1;
-            if (!b.name) return -1;
-            return a.name.localeCompare(b.name);
-            });
+          const sortedPlatforms = sortData(platforms, 'alphaUp');
           const platformLogos = await PlatformLogo.findAll();
-          res.render("platforms/index", { platforms, platformLogos});
+          res.render("platforms/index", { sortedPlatforms, platformLogos});
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -38,7 +33,9 @@ router.get('/:platformId/games', async (req, res) => {
         platforms: [platformId,],
       },
     });
-    res.render('games/_list', { user: loggedInUser, games, platform });
+    const sortedGames = sortData(games, 'alphaUp');
+
+    res.render('games/_list', { user: loggedInUser, games: sortedGames, platform });
   } catch (error) {
     console.error('Error fetching games:', error);
     res.status(500).json({ error: 'Internal Server Error' });

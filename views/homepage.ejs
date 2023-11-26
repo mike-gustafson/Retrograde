@@ -1,87 +1,106 @@
 <div class="container-fluid">
     <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 0%; top: 0px;">
-                <div class="card p-1 mb-4">
-                    <section class="text-white p-1">
-                        <h2>Get Started!</h2>
-                        <p>Embark on your journey into retro gaming today. Explore our vast collection, discover hidden treasures,
-                            and relive the magic of classic gaming!</p>
-                        <a href="/platforms">Explore Platforms</a>, Find you favorite games, Track your collection, and more!
-                    </section>
-                </div>
-                <div class="card p-1">
-                    <section class="text-white p-1">
-                        <h2>Technology Used</h2>
-                            <p>RetroGrade is built using the latest technologies to provide a seamless and enjoyable experience:</p>
-                            <ul>
-                                <li>Node.js for server-side scripting: Utilizing the power of Node.js for efficient server-side
-                                    operations.</li>
-                                <li>Express.js for web application framework: Employing Express.js to create a robust and scalable web
-                                    application framework.</li>
-                                <li>Sequelize as the ORM for handling database interactions: Leveraging Sequelize to streamline database
-                                    operations and enhance data management.</li>
-                                <li>Bootstrap for responsive and stylish UI components: Implementing Bootstrap for a visually appealing
-                                    and responsive user interface.</li>
-                            </ul>
-                        </section>
-                </div>
+            <div class="card p-1 mb-4" id="get-started">
+                <section class="text-white p-1">
+                    <h2>Get Started!</h2>
+                    <p>Embark on your journey into retro gaming today. Explore our vast collection, discover hidden
+                        treasures,
+                        and relive the magic of classic gaming!</p>
+                    <a href="/platforms">Explore Platforms</a>, Find you favorite games, Track your collection, and
+                    more!
+                </section>
+            </div>
+            <div class="card p-1" id="technology-used">
+                <section class="text-white p-1">
+                    <h2>Technology Used</h2>
+                    <p>RetroGrade is built using the latest technologies to provide a seamless and enjoyable experience:
+                    </p>
+                    <ul>
+                        <li>Node.js for server-side scripting: Utilizing the power of Node.js for efficient server-side
+                            operations.</li>
+                        <li>Express.js for web application framework: Employing Express.js to create a robust and
+                            scalable web
+                            application framework.</li>
+                        <li>Sequelize as the ORM for handling database interactions: Leveraging Sequelize to streamline
+                            database
+                            operations and enhance data management.</li>
+                        <li>Bootstrap for responsive and stylish UI components: Implementing Bootstrap for a visually
+                            appealing
+                            and responsive user interface.</li>
+                    </ul>
+                </section>
+            </div>
         </div>
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">
-                <div class="card p-1 mb-4">
-                    <section class="text-white">
-                        <h2>Explore Retro Gaming</h2>
-                        <p>RetroGrade brings together an extensive collection of classic games and platforms, providing users with a
-                            comprehensive experience of the rich history of retro gaming. Discover and relive the nostalgia of
-                            timeless favorites.</p>
-                    </section>
-                </div>
-                <div class="card p-1 mb-4">
-                    <section class="text-white p-1">
-                        <h2>Key Features</h2>
-                        <ul>
-                            <li>Discover a vast library of retro games: Explore a curated selection of classic games, ranging from
-                                iconic titles to hidden gems.</li>
-                            <li>Explore platforms from gaming history: Dive into the diverse world of gaming platforms that shaped
-                                the history of video games.</li>
-                            <li>Build your wishlist and track your gaming collection: Use RetroGrade to organize and manage your
-                                retro gaming collection effortlessly.</li>
-                        </ul>
-                    </section>
-                </div>
-                <div class="card p-1">
-                    <section class="text-white" id="quoteContainer"></section>
-                </div>
+            <div class="card p-1 mb-4" id="explore-retro-gaming">
+                <section class="text-white">
+                    <h2>Explore Retro Gaming</h2>
+                    <p>RetroGrade brings together an extensive collection of classic games and platforms, providing
+                        users with a
+                        comprehensive experience of the rich history of retro gaming. Discover and relive the nostalgia
+                        of
+                        timeless favorites.</p>
+                </section>
+            </div>
+            <div class="card p-1 mb-4" id="key-features">
+                <section class="text-white p-1">
+                    <h2>Key Features</h2>
+                    <ul>
+                        <li>Discover a vast library of retro games: Explore a curated selection of classic games,
+                            ranging from
+                            iconic titles to hidden gems.</li>
+                        <li>Explore platforms from gaming history: Dive into the diverse world of gaming platforms that
+                            shaped
+                            the history of video games.</li>
+                        <li>Build your wishlist and track your gaming collection: Use RetroGrade to organize and manage
+                            your
+                            retro gaming collection effortlessly.</li>
+                    </ul>
+                </section>
+            </div>
+            <div class="card p-1" id="quote">
+                <section class="text-white" id="quoteContainer"></section>
+            </div>
         </div>
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">
-                <div class="card p-1">
-                    <section class="text-white">
-                            <div class="mb-md-5 mt-md-4 card-body p-5 text-center">
-                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                                <p class="text-white-50 mb-5">Please enter your login and password!</p>
-                                <form action="/auth/login" method="POST">
-                                    <div class="form-outline form-white mb-4">
-                                        <input type="email" id="typeEmailX" class="form-control form-control-lg col col-md-8"
-                                            name="email" /></br>
-                                        <label class="form-label" for="typeEmailX">Email</label>
-                                    </div>
-                                    <div class="form-outline form-white mb-4">
-                                        <input type="password" id="typePasswordX" name="password"
-                                            class="form-control form-control-lg col col-md-8" /></br>
-                                        <label class="form-label" for="typePasswordX">Password</label>
-                                    </div>
-            
-                                    <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></br>
-                                        <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-                                    </p>
-                                    <p class="mb-0">Don't have an account? <a href="auth/signup" class="text-white-50 fw-bold">Sign Up</a>
-                                    </p>
-                                </form>
+            <div class="card p-1" id="login">
+                <section class="text-white">
+                    <div class="mb-md-5 mt-md-4 card-body p-5 text-center">
+                        <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                        <p class="text-white-50 mb-5">Please enter your login and password!</p>
+                        <form action="/auth/login" method="POST">
+                            <div class="form-outline form-white mb-4">
+                                <input type="email" id="typeEmailX" class="form-control form-control-lg col col-md-8"
+                                    name="email" /></br>
+                                <label class="form-label" for="typeEmailX">Email</label>
                             </div>
-                    </section>
-                </div>
+                            <div class="form-outline form-white mb-4">
+                                <input type="password" id="typePasswordX" name="password"
+                                    class="form-control form-control-lg col col-md-8" /></br>
+                                <label class="form-label" for="typePasswordX">Password</label>
+                            </div>
+
+                            <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></br>
+                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                            </p>
+                            <p class="mb-0">Don't have an account? <a href="auth/signup"
+                                    class="text-white-50 fw-bold">Sign Up</a>
+                            </p>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        <div class="card p-1 mb-4" id="profile-summary" style="display: none;">
+            <section class="text-white">
+                <h2>Profile Summary</h2>
+                <p>Welcome, <span id="usernamePlaceholder">Username</span>! Your profile summary goes here.</p>
+            </section>
         </div>
+        
     </div>
-</div> 
+    </div>
+</div>
 
 <script>
     async function updateQuote() {
@@ -96,7 +115,32 @@
             console.error('Error fetching quote:', error);
         }
     }
+
+    async function updateProfileSummary() {
+        try {
+            const response = await fetch('/profile/user');
+            const user = await response.json();
+            const loginSection = document.getElementById('login');
+            const profileSummarySection = document.getElementById('profile-summary');
+            const usernamePlaceholder = document.getElementById('usernamePlaceholder');
+
+            if (user && user.name) {
+                loginSection.style.display = 'none';
+                profileSummarySection.style.display = 'block';
+                usernameCapitalized = user.name.charAt(0).toUpperCase() + user.name.slice(1);
+                usernamePlaceholder.textContent = usernameCapitalized;
+            } else {
+                loginSection.style.display = 'block';
+                profileSummarySection.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    }
+
     updateQuote();
     setInterval(updateQuote, 30000);
-</script>
+    updateProfileSummary(); // Call this function when the page loads
 
+
+</script>

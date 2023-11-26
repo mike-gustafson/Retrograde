@@ -3,72 +3,50 @@
 const express = require('express');
 const router = express.Router();
 const { Game, Platform, User } = require('../models');
+const sortData = require('../utils/sort-data.util');
 
+// IGDB.com API headers
+const headers = {
+  'Accept': process.env.HEADER_ACCEPT,
+  'Client-ID': process.env.HEADER_CLIENT_ID,
+  'Authorization': process.env.HEADER_AUTHORIZATION,
+  'Content-Type': process.env.HEADER_CONTENT_TYPE,
+};
+
+// GET /games - fetch all games on consoles and handhelds
 router.get("/", async (req, res) => {
   try {
     const { Op } = require("sequelize");
     const platforms = await Platform.findAll({
       attributes: ['id'],
-      where: {
-        category: [1, 5],
-      },
-      })
-      const platformIds = platforms.map((platform) => platform.id);
-      console.log('id list: ',platformIds);
+      where: { category: [1, 5], },
+    })
+    const platformIds = platforms.map((platform) => platform.id);
     const games = await Game.findAll({
-      where: {
-        platforms: {
-        [Op.overlap]: platformIds,
-      }
-      },
+      where: { platforms: { [Op.overlap]: platformIds, } },
     });
-    // Render the "hardware/games" view with the fetched data
-    res.render("games/index", { games: games});
+    res.render("games/index", { games });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-
+// GET /games/byId/:gameId - fetch a single game by ID
 router.get('/byId/:gameId', async (req, res) => {
-  const gameId = req.params.gameId;
-
-  const rawQuery = `fields *; \r\nwhere id = ${gameId};`;
-
+  const gameRaw = `fields *; \r\nwhere id = ${req.params.gameId};`;
   try {
-    const response = await fetch("https://api.igdb.com/v4/games", {
+    const gameData = await fetch("https://api.igdb.com/v4/games", {
       method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Client-ID': 'mtos002sejiyk8rra7wr9i0cjeq4fk',
-        'Authorization': 'Bearer k54046h0mmd74wexbb3r2kmr6aatah',
-        'Content-Type': 'text/plain',
-      },
-      body: rawQuery,
+      headers: headers,
+      body: gameRaw,
     });
+    const game = await gameData.json();
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const game = await response.json();
-    console.log(game, 'that was game');
-    console.log(game[0].cover, 'that was game[0].cover')
-
-    // const delay = ms => new Promise(res => setTimeout(res, ms));
-    // await delay(5000);
-    
     const coverRaw = `fields *; \r\nwhere id = ${game[0].cover};`;
-    console.log(coverRaw, 'that was coverRaw');
     const cover = await fetch("https://api.igdb.com/v4/covers", {
       method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Client-ID': 'mtos002sejiyk8rra7wr9i0cjeq4fk',
-        'Authorization': 'Bearer k54046h0mmd74wexbb3r2kmr6aatah',
-        'Content-Type': 'text/plain',
-      },
+      headers: headers,
       body: coverRaw,
     });
 
@@ -77,7 +55,6 @@ router.get('/byId/:gameId', async (req, res) => {
     }
 
     const coverData = await cover.json();
-    console.log(coverData, 'that was cover');
 
     res.render('games/details', { game: game[0], cover: coverData[0] });
   } catch (error) {
@@ -86,48 +63,72 @@ router.get('/byId/:gameId', async (req, res) => {
   }
 });
 
-  
+// GET /games/:platformId - fetch all games on a single platform
+router.get('/:platformId', async (req, res) => {
+  try {
+    const platformId = req.params.platformId;
 
-  router.get('/:platformId', async (req, res) => {
-    try {
-      const platformId = req.params.platformId;
-  
-      let platform = {};
-      if (req.query.platformName) {
-        platform.name = req.query.platformName;
-      } else {
-        platform = await Platform.findByPk(platformId);
-      }
-  
-      const games = await Game.findAll({
-        where: {
-          platforms: [platformId]
-        },
-      });
-      res.render("games/index", { games, platform });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal Server Error' });
+    let platform = {};
+    if (req.query.platformName) {
+      platform.name = req.query.platformName;
+    } else {
+      platform = await Platform.findByPk(platformId);
     }
-  });
 
+    const games = await Game.findAll({
+      where: {
+        platforms: [platformId]
+      },
+    });
+    const sortedGames = sortData(games, 'alphaUp');
 
+    res.render("games/index", { sortedGames, platform });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// POST /games/add-to-collection/:gameId - fetch a single game by ID and add it to the user's collection
 router.post('/add-to-collection', async (req, res) => {
   const { userId, gameId, platformId } = req.body;
   try {
-    let useracct = await User.findOne({where: { id: userId }});
-        
-    if (!useracct.games_owned) {
-      useracct.games_owned = {};
+    let user = await User.findOne({ where: { id: userId } });
+    if (!user.games_owned) { 
+      user.games_owned = {}; }
+    if (!user.games_owned[platformId]) { 
+      user.games_owned[platformId] = [gameId]; 
+    } else { 
+      user.games_owned[platformId].push(gameId); 
     }
-    if (!useracct.games_owned[platformId]) {
-      useracct.games_owned[platformId] = [gameId];
+    user.games_owned_was_updated = true;
+    user.changed('games_owned', true); // !IMPORTANT! required to get an object to update in PSQL 
+    await user.save();
+    return res.status(200).json({ message: `Game ${gameId} added to collection` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// POST /games/remove-from-collection/:gameId - fetch a single game by ID and remove it from the user's collection
+router.post('/remove-from-collection/:gameId', async (req, res) => {
+  const { userId, gameId, platformId } = req.body;
+  console.log(req.body.userId,'userId', req.body.gameId,'gameId', req.body.platformId,'platformId')
+  try {
+    let user = await User.findOne({ where: { id: userId } });
+    if (user.games_owned && user.games_owned[platformId]) {
+      user.games_owned[platformId] = user.games_owned[platformId].filter(id => id !== gameId);
+      if (user.games_owned[platformId].length === 0) {
+        delete user.games_owned[platformId];
+      }
+      user.games_owned_was_updated = true;
+      user.changed('games_owned', true);
+      await user.save();
+      return res.status(200).json({ message: `Game ${gameId} removed from collection` });
     } else {
-      useracct.games_owned[platformId].push(gameId);
+      return res.status(404).json({ error: 'Game not found in user collection' });
     }
-    useracct.changed('games_owned', true)
-    await useracct.save();
-    return res.status(200).json({ success: true, message: 'Game added to collection' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal Server Error' });

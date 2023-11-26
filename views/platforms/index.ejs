@@ -3,7 +3,7 @@
     <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
       <div class="accordion custom-accordion" id="platformAccordion" style="overflow-y: hidden">
         <% let logoUrl;
-          platforms.forEach((platform, index) => {
+          sortedPlatforms.forEach((platform, index) => {
           if ((platform.category === 1 || platform.category === 5) && platform.platformLogo) {
           if (platform.platformLogo) {
           logoUrl = platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg', 'png');

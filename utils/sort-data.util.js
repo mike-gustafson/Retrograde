@@ -1,20 +1,21 @@
 function sortData(data, method) {
-let sortedData;
+    
     if (method === 'alphaUp') {
-        sortedData = data.sort((a, b) => {
-            if (a.platform < b.platform) {
+        data.sort((a, b) => {
+            if (a.name < b.name) {
                 return -1;
-            } else if (a.platform > b.platform) {
+            } else if (a.name > b.name) {
                 return 1;
             } else {
                 return 0;
             }
         });
+        return data;
     };
 
     if (method === 'alphaDown') {
         sortedData = data.sort((a, b) => {
-            if (a.platform > b.platform) {
+            if (a.name > b.name) {
                 return -1;
             } else if (a.platform < b.platform) {
                 return 1;
@@ -22,10 +23,11 @@ let sortedData;
                 return 0;
             }
         });
+        return data;
     };
 
-    if (method === 'dateUp') { 
-        sortedData = data.sort((a, b) => {
+    if (method === 'dateUp') {
+        data.sort((a, b) => {
             if (a.createdAt < b.createdAt) {
                 return -1;
             } else if (a.createdAt > b.createdAt) {
@@ -34,10 +36,11 @@ let sortedData;
                 return 0;
             }
         });
+        return data;
     };
 
     if (method === 'dateDown') {
-        sortedData = data.sort((a, b) => {
+        data.sort((a, b) => {
             if (a.createdAt > b.createdAt) {
                 return -1;
             } else if (a.createdAt < b.createdAt) {
@@ -46,9 +49,10 @@ let sortedData;
                 return 0;
             }
         });
+        return data;
     };
-    
-    return sortedData;
+
+    return data;
 }
 
 module.exports = sortData;

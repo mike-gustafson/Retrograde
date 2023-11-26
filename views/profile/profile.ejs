@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 1wh;">
     <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
@@ -8,7 +9,7 @@
               width="150">
             <div class="mt-3 text-white">
               <h4>
-                <%= name %>
+                <%= user.name %>
               </h4>
               <p class="text-secondary mb-1">Full Stack Developer</p>
               <p class="text-white font-size-sm">Tacoma, WA</p>
@@ -73,65 +74,14 @@
       </div>
     </div>
     <div class="col-sm-6 col-lg-6 mb-3" style="position: absolute; left: 0%; top: 0px;">
-      <div class="card p-1">
-        <section class="p-1 table-responsive" style="max-height: 100em; overflow-y: scroll">
-          
-          <h6 class="d-flex align-items-center mb-1">
-            <i class="material-icons text-info mr-2">Collection</i>
-            <%= uniqueGames %> Titles
-          
-          <div class="d-flex justify-content-right mb-2" style="width: 100%; justify-content: right;">
-            <select id="platformFilter" class="form-select" onchange="filterTable()"  style="width: 40%;">
-              <option value="all">All</option>
-              <!-- Add options dynamically based on available platforms -->
-              <% const uniquePlatforms = [...new Set(userGames.map(game => game.platform))] %>
-              <% for (const platform of uniquePlatforms) { %>
-                <option value="<%= platform %>"><%= platform %></option>
-              <% } %>
-            </select>
-          </div>
-        </h6>
-          <table class="table-dark table-bordered table-striped" id="gameTable" style="width: 100%;">
-            <col style="width:25%">
-            <col style="width:75%">
-            <thead>
-              <tr>
-                <th>Platform</th>
-                <th>Game</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (const gameDetails of userGames) { %>
-                <tr class="text-secondary" data-platform="<%= gameDetails.platform %>">
-                  <td>
-                    <%= gameDetails.platform %>
-                  </td>
-                  <td>          
-                    <a href="/games/byId/<%= gameDetails.id %>/?_method=PUT" method="POST">
-                    <%= gameDetails.game %>
-                  </a>
-                  </td>
-                </tr>
-                <% } %>
-            </tbody>
-          </table>
-          <nav aria-label="Page navigation">
-            <ul class="pagination">
-              <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <!-- Add more page items as needed -->
-              <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-            </ul>
-          </nav>
-        </section>
-      </div>
+      <%- include('_user-collection') %>
+      
     </div>
     <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
       <div class="card p-1">
         <section class="card-body text-white">
           <h6 class="d-flex align-items-center mb-3">
-            <i class="material-icons text-info mr-2">Favorite Games</i>
+            <i class="material-icons text-info mr-2">Top Systems</i>
           </h6>
           <table class="table-dark table-bordered" style="width: 100%;"></table>
             <thead>
@@ -168,48 +118,47 @@
                 <td>Game 1</td>
                 <td>Platform 1</td>
               </tr>
-              <tr>
-                <td>Game 2</td>
-                <td>Platform 2</td>
-              </tr>
             </tbody>
           </table>
         </section>
       </div>
     </div>
 
-    <script>
-      function filterTable() {
-        const platformFilter = document.getElementById('platformFilter').value;
-        const rows = document.getElementById('gameTable').rows;
-    
-        for (let i = 1; i < rows.length; i++) {
-      const platformCell = rows[i].cells[0];
-      const platformValue = platformCell.textContent.trim();
-      
-      if (platformFilter === 'all' || platformValue === platformFilter) {
-        rows[i].style.display = '';
-      } else {
-        rows[i].style.display = 'none';
-      }
-    }
-      }
+<script>
+  function filterTable(userGames) {
+    console.log(userGames, 'userGames');
+    const selectedPlatform = document.getElementById('platformFilter').value;
+    console.log(userGames,'userGames beforte fileter')
+    const filteredGames = selectedPlatform === 'all' ? userGames : userGames.filter(game => game.platform === selectedPlatform);
+    console.log(filteredGames, 'filtered games');
+    renderGames(filteredGames);
+}
 
-      document.addEventListener('DOMContentLoaded', function () {
-    // Your existing logic...
+function renderGames(games) {
+    const itemsPerPage = 20;
+    const currentPage = 1;
 
-    // Initialize Bootstrap Table and Pagination
-    var gameTable = new bootstrapTable.BootstrapTable(document.getElementById('gameTable'), {
-      pagination: true,
-      pageSize: 20,  // Set the number of rows per page
-      pageList: [10, 20, 50],  // Set available page sizes
-      sidePagination: 'client',  // 'client' for client-side, 'server' for server-side
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const displayedGames = games.slice(startIdx, endIdx);
+    const tableBody = document.querySelector('#gameTable tbody');
+    tableBody.innerHTML = '';
+
+    displayedGames.forEach(game => {
+        const row = document.createElement('tr');
+        row.classList.add('text-secondary');
+        row.setAttribute('data-platform', game.platform);
+        const platformCell = document.createElement('td');
+        platformCell.textContent = game.platform;
+        row.appendChild(platformCell);
+        const gameCell = document.createElement('td');
+        const gameLink = document.createElement('a');
+        gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
+        gameLink.method = 'POST';
+        gameLink.textContent = game.game;
+        gameCell.appendChild(gameLink);
+        row.appendChild(gameCell);
+        tableBody.appendChild(row);
     });
-
-    // Handle pagination event
-    gameTable.$el.addEventListener('page-change.bs.table', function (e, number, size) {
-      // Handle pagination logic here, e.g., fetch and display the corresponding data
-      console.log('Current page:', number, 'Page size:', size);
-    });
-  });
-    </script>
+}
+</script>

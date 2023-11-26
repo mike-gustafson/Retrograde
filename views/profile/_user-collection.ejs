@@ -1,0 +1,130 @@
+
+<div class="card p-1">
+    <section class="p-1 table-responsive" style="max-height: 100em; overflow-y: scroll">
+
+        <h6 class="d-flex align-items-center mb-1">
+            <i class="material-icons text-info mr-2">Collection</i>
+            <%= uniqueGames %> Titles
+            <div class="d-flex justify-content-right mb-2" style="width: 100%; justify-content: right;">
+                <select id="platformFilter" class="form-select" onchange="filterTable(<%= JSON.stringify(userGames) %>)" style="width: 40%;">
+                    <option value="all">All</option>
+                    <% const uniquePlatforms = [...new Set(userGames.map(game => game.platform))]; %>
+                    <% for (const platform of uniquePlatforms) { %>
+                        <option value="<%= platform %>">
+                            <%= platform %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+        </h6>
+        <table class="table-dark table-bordered table-striped" id="gameTable" style="width: 100%;">
+            <col style="width:25%">
+            <col style="width:75%">
+            <thead>
+                <tr>
+                    <th>Platform</th>
+                    <th>Game</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% const itemsPerPage=20; %>
+                <% const totalPages=Math.ceil(userGames.length / itemsPerPage); %>
+                <% const currentPage=req.query.page || 1; %>
+                <% const startIdx=(currentPage - 1) * itemsPerPage; %>
+                <% const endIdx=startIdx + itemsPerPage; %>
+                <% const displayedGames=userGames.slice(startIdx, endIdx); %>
+
+                <% displayedGames.forEach(game=> { %>
+                <tr class="text-secondary" data-platform="<%= game.platform %>">
+                    <td>
+                    <%= game.platform %>
+                    </td>
+                    <td>
+                    <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
+                        <%= game.game %>
+                    </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeFromCollection('<%= game.id %>', '<%= game.platform %>')">
+                            <i class="bi bi-trash"></i> Remove
+                        </button>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination-dark">
+                <% for (let i=1; i <=totalPages; i++) { %>
+                    <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                    <% } %>
+            </ul>
+        </nav>
+
+    </section>
+</div>
+<script>
+    function filterTable(userGames) {
+    console.log(userGames, 'userGames');
+    const selectedPlatform = document.getElementById('platformFilter').value;
+    console.log(userGames,'userGames beforte fileter')
+    const filteredGames = selectedPlatform === 'all' ? userGames : userGames.filter(game => game.platform === selectedPlatform);
+    console.log(filteredGames, 'filtered games');
+    renderGames(filteredGames);
+}
+
+function renderGames(games) {
+    const itemsPerPage = 20;
+    const currentPage = 1;
+
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const displayedGames = games.slice(startIdx, endIdx);
+    const tableBody = document.querySelector('#gameTable tbody');
+    tableBody.innerHTML = '';
+
+    displayedGames.forEach(game => {
+        const row = document.createElement('tr');
+        row.classList.add('text-secondary');
+        row.setAttribute('data-platform', game.platform);
+        const platformCell = document.createElement('td');
+        platformCell.textContent = game.platform;
+        row.appendChild(platformCell);
+        const gameCell = document.createElement('td');
+        const gameLink = document.createElement('a');
+        gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
+        gameLink.method = 'POST';
+        gameLink.textContent = game.game;
+        gameCell.appendChild(gameLink);
+        row.appendChild(gameCell);
+        tableBody.appendChild(row);
+    });
+}
+
+function removeFromCollection(gameId, platform) {
+        // Make an asynchronous request to remove the game from the user's collection
+        // You can use fetch or another AJAX library for this
+
+        fetch(`/games/remove-from-collection/${gameId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ gameId, platform }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            // Assuming successful removal, refresh the table
+            filterTable(userGames); // You might need to pass userGames here if it's not in the scope
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>

@@ -1,53 +1,84 @@
 <div class="card p-0 text-white">
   <section class="p-1">
-  <h1>Games for <%= platform.name %> (<%= games.length %> games)</h1>
-</section>
+    <h1>Games for <%= platform.name %> (<%= games.length %> games)</h1>
+  </section>
 </div>
-<div style="overflow-y: auto; max-height: 80vh;">
+<div style="overflow-y: auto; max-height: 75vh;">
   <div class="card p-1 text-white">
-  <section>
-<table style="width:100%; table-layout: fixed;">
-  <col style="width:60%">
-	<col style="width:20%">
-	<col style="width:10%">
-	<col style="width:10%">
-  <thead>
-    <tr>
-      <th style="text-align:center">Name</th>
-      <th style="text-align:center">Copies Owned</th>
-      <th style="text-align:center">Wishlist</th>
-      <th style="text-align:center">Do Not Want</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% games.forEach(game=> { %>
-      <tr style="border-bottom: 1px solid aqua;" id="<%= game.id %>">        
-        <td style="width: 75%">
-          <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
-            <%= game.name %>
-          </a>
-        </td>
-        <td class="copies-owned-column">
-          <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
-            <% let copyCount = 1; %>
-            <% console.log(copyCount) %>
-            <% copyCount = user.games_owned[platform.id].filter(id => id === game.id).length %>
-            <% console.log(copyCount) %>
-            <%= copyCount %> owned  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">+1</button>
-          <% } else { %>
-            <% if (user) { %>
-              <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>);">Add to Collection</button>
-            <% } else { %>
-              <!-- User not logged in, handle accordingly -->
-            <% } %>
-          <% } %>
-        </td>
-        <td><input type="checkbox" <%=user && user.games_wishlist && user.games_wishlist.includes(game.id) ? 'checked'
-            : '' %> ></td>
-        <td></td> <!-- Placeholder for "Do Not Want" column -->
-      </tr>
-      <% }); %>
-  </tbody>
-</table>
-</section>
-</div></div>
+    <section>
+      <table style="width:100%; table-layout: fixed;">
+        <col style="width:60%"><col style="width:15%"><col style="width:15%"><col style="width:10%">
+        <thead>
+          <tr>
+            <th style="text-align:center">Name</th>
+            <th style="text-align:center">Copies Owned</th>
+            <th style="text-align:center">Wishlist</th>
+            <th style="text-align:center">Do Not Want</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% games.forEach(game=> { %>
+            <tr style="border-bottom: 1px solid aqua;" id="<%= game.id %>">
+              <td style="width: 75%">
+                <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
+                  <%= game.name %>
+                </a>
+              </td>
+              <td class="copies-owned-column">
+                <% if (user && user.games_owned && user.games_owned[platform.id] &&
+                  user.games_owned[platform.id].includes(game.id)) { %>
+                  <% let copyCount=1; %>
+                    <% copyCount=user.games_owned[platform.id].filter(id=> id === game.id).length %>
+                      <%= copyCount %> owned <button
+                          onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>);loadGames(<%= platform.id %>)">+1</button>
+                        <% } else { %>
+                          <% if (user) { %>
+                            <button
+                              onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>);loadGames(<%= platform.id %>)">Add
+                              to Collection</button>
+                            <% } else { %>
+                              <!-- User not logged in, handle accordingly -->
+                              <% } %>
+                                <% } %>
+              </td>
+              <td><input type="checkbox" <%=user && user.games_wishlist && user.games_wishlist.includes(game.id)
+                  ? 'checked' : '' %> ></td>
+              <td></td> 
+            </tr>
+            <% }); %>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</div>
+<script>
+  async function addToCollection(userId, gameId, platformId, gameCount) {
+    try {
+        console.log(userId, gameId, platformId, gameCount);
+
+        const response = await fetch('games/add-to-collection', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, gameId, platformId }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data, 'data');
+
+        const row = document.getElementById(gameId);
+        if (row) {
+            const copiesOwnedColumn = row.querySelector('.copies-owned-column');
+            if (copiesOwnedColumn) {
+                copiesOwnedColumn.innerHTML = `${gameCount} owned <button onclick="addToCollection(${userId}, ${gameId}, ${platformId});">+1</button>`;
+            }
+        }
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+}
+
+</script>

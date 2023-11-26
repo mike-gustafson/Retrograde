@@ -1,59 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('styles') %>
+
+<head>
+  <%- include('styles') %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RetroGrade - Your Retro Gaming Hub</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap">
-    
-    
-    <script>
-async function addToCollection(userId, gameId, platformId, gameCount) {
-  try {
-    console.log(userId, gameId, platformId, gameCount);
+</head>
 
-    const response = await fetch('games/add-to-collection', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, gameId, platformId }),
-    });
+<body style="padding-top: 60px;">
+  <%- include('partials/_navbar') %>
+    <%- body %>
+      <%- include('partials/_footer') %>
+        <%- include('scripts') %>
+</body>
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const data = await response.json();
-    console.log(data,'data');
-
-    const row = document.getElementById(gameId);
-    if (row) {
-      const copiesOwnedColumn = row.querySelector('.copies-owned-column');
-      if (copiesOwnedColumn) {
-        copiesOwnedColumn.innerHTML = `${gameCount} owned <button onclick="addToCollection(${userId}, ${gameId}, ${platformId});">+1</button>`;
-      }
-    }
-  } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
-  }
-}
-
-
-
-    </script>
-  
-  </head>
-  <body style="padding-top: 60px;">
-    <%- include('partials/_navbar') %>
-  
-
-
-
-    
-    <%- body %> 
-    <footer>
-      <p>&copy; 2023 RetroGrade. All rights reserved.</p>
-  </footer>
-    <%- include('scripts') %>
-  </body>
 </html>

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('../config/ppConfig');
 
+
 // import models
 const { user } = require('../models');
 
@@ -20,11 +21,11 @@ router.get('/logout', (req, res) => {
     }
     req.flash('success', 'Logging out... See you next time!');
     res.redirect('/');
-  }); // logs the user out of the session
+  });
 });
 
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/profile',
+  successRedirect: '../',
   failureRedirect: '/auth/login',
   successFlash: 'Welcome back ...',
   failureFlash: 'Either email or password is incorrect' 
@@ -55,7 +56,6 @@ router.post('/signup', async (req, res) => {
         res.redirect('/auth/signup');
   }
 });
-
 
 
 module.exports = router;
