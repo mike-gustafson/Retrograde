@@ -45,7 +45,8 @@
                     </a>
                     </td>
                     <td>
-                        <button class="btn btn-danger" onclick="removeFromCollection('<%= game.id %>', '<%= game.platform %>')">
+                        <% const platformIdArray = Object.keys(user.games_owned) %>
+                        <button class="btn btn-danger" onclick="removeFromCollection(<%= user.id %>, <%= game.id %>, <%= platformIdArray %>)">
                             <i class="bi bi-trash"></i> Remove
                         </button>
                     </td>
@@ -70,11 +71,8 @@
 </div>
 <script>
     function filterTable(userGames) {
-    console.log(userGames, 'userGames');
     const selectedPlatform = document.getElementById('platformFilter').value;
-    console.log(userGames,'userGames beforte fileter')
     const filteredGames = selectedPlatform === 'all' ? userGames : userGames.filter(game => game.platform === selectedPlatform);
-    console.log(filteredGames, 'filtered games');
     renderGames(filteredGames);
 }
 
@@ -106,25 +104,5 @@ function renderGames(games) {
     });
 }
 
-function removeFromCollection(gameId, platform) {
-        // Make an asynchronous request to remove the game from the user's collection
-        // You can use fetch or another AJAX library for this
 
-        fetch(`/games/remove-from-collection/${gameId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ gameId, platform }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            // Assuming successful removal, refresh the table
-            filterTable(userGames); // You might need to pass userGames here if it's not in the scope
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
 </script>

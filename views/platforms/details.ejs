@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
+        <div id="left-col" class="col-sm-2 mb-4" style="position: absolute; left: 0%; top: 0px;">
+            <div class="card p-1 mb-4" id="get-started">
+                <section class="text-white p-1 justify-content-center" style="background-color: azure;">
+                    <% let logoUrl; 
+                    if (platformLogo) { 
+                        logoUrl = platformLogo.url.replace('jpg', 'png');
+                        logoUrl = logoUrl.replace('t_thumb', 't_720p');
+                    }
+                    %>
+                    <% if (logoUrl) { %>
+                        <center><img src="http:<%= logoUrl %>" alt="<%= platform.name %> Logo" style="max-width: 200px; max-height: 200px;"></centeR>
+                    <% } %>
+                </section>
+                <section class="text-white p-1" >
+                    System type: <% let platformCategory;if (platform.category === 1) {platformCategory = 'Console';} else if (platform.category === 5) {platformCategory = 'Handheld';}%><br>
+                    <%= platformCategory %><%= platform.name %> (<%= platform.alternativeName %>)
+                    Generation: <%= platform.generation %><br>
+                </section>
+            </div>
+        </div>
+        <div id="right-col" class="col-sm-2 col-md-10 mb-4" style="position: absolute; left: 0%; top: 0px;">
+
+<%- include('../games/_list') %>
+<% console.log(platformLogo.url) %>
+    </div>
+</div>
+</div>

@@ -46,8 +46,10 @@ app.use('/profile', require('./controllers/profiles'));
 app.use('/games', require('./controllers/games'));
 app.use('/auth', require('./controllers/auth'));
 
-app.get('/', (req, res) => {
-  res.render('homepage');
+app.get('/', async (req, res) => {
+  const platforms = await Platform.findAll();
+  console.log(platforms, 'platforms')
+  res.render('homepage', { platforms });
 })
 
 const PORT = process.env.PORT;

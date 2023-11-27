@@ -25,21 +25,15 @@
                 </a>
               </td>
               <td class="copies-owned-column">
-                <% if (user && user.games_owned && user.games_owned[platform.id] &&
-                  user.games_owned[platform.id].includes(game.id)) { %>
+                <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
                   <% let copyCount=1; %>
-                    <% copyCount=user.games_owned[platform.id].filter(id=> id === game.id).length %>
-                      <%= copyCount %> owned <button
-                          onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>);loadGames(<%= platform.id %>)">+1</button>
-                        <% } else { %>
-                          <% if (user) { %>
-                            <button
-                              onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>);loadGames(<%= platform.id %>)">Add
-                              to Collection</button>
-                            <% } else { %>
-                              <!-- User not logged in, handle accordingly -->
-                              <% } %>
-                                <% } %>
+                  <% copyCount = user.games_owned[platform.id].filter(id=> id === game.id).length %>
+                  <%= copyCount %> owned 
+                  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>); loadGames(<%= platform.id %>)">+1</button>
+                  <button onclick="removeFromCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>); loadGames(<%= platform.id %>)">-1</button>
+                <% } else { %>
+                  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>); loadGames(<%= platform.id %>)">Add to Collection</button>
+                <% } %>
               </td>
               <td><input type="checkbox" <%=user && user.games_wishlist && user.games_wishlist.includes(game.id)
                   ? 'checked' : '' %> ></td>
@@ -51,34 +45,3 @@
     </section>
   </div>
 </div>
-<script>
-  async function addToCollection(userId, gameId, platformId, gameCount) {
-    try {
-        console.log(userId, gameId, platformId, gameCount);
-
-        const response = await fetch('games/add-to-collection', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, gameId, platformId }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log(data, 'data');
-
-        const row = document.getElementById(gameId);
-        if (row) {
-            const copiesOwnedColumn = row.querySelector('.copies-owned-column');
-            if (copiesOwnedColumn) {
-                copiesOwnedColumn.innerHTML = `${gameCount} owned <button onclick="addToCollection(${userId}, ${gameId}, ${platformId});">+1</button>`;
-            }
-        }
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-    }
-}
-
-</script>

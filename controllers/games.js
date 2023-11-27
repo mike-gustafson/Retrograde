@@ -111,21 +111,26 @@ router.post('/add-to-collection', async (req, res) => {
   }
 });
 
-// POST /games/remove-from-collection/:gameId - fetch a single game by ID and remove it from the user's collection
-router.post('/remove-from-collection/:gameId', async (req, res) => {
+// POST /games/remove-from-collection - fetch a single game by ID and remove it from the user's collection
+router.post('/remove-from-collection', async (req, res) => {
   const { userId, gameId, platformId } = req.body;
-  console.log(req.body.userId,'userId', req.body.gameId,'gameId', req.body.platformId,'platformId')
+  console.log(req.body.userId, 'userId', req.body.gameId, 'gameId', req.body.platformId, 'platformId');
   try {
     let user = await User.findOne({ where: { id: userId } });
     if (user.games_owned && user.games_owned[platformId]) {
-      user.games_owned[platformId] = user.games_owned[platformId].filter(id => id !== gameId);
-      if (user.games_owned[platformId].length === 0) {
-        delete user.games_owned[platformId];
+      const gameIndex = user.games_owned[platformId].indexOf(gameId);
+      if (gameIndex !== -1) {
+        user.games_owned[platformId].splice(gameIndex, 1); // Remove one copy
+        if (user.games_owned[platformId].length === 0) {
+          delete user.games_owned[platformId];
+        }
+        user.games_owned_was_updated = true;
+        user.changed('games_owned', true);
+        await user.save();
+        return res.status(200).json({ message: `One copy of game ${gameId} removed from collection` });
+      } else {
+        return res.status(404).json({ error: 'Game not found in user collection' });
       }
-      user.games_owned_was_updated = true;
-      user.changed('games_owned', true);
-      await user.save();
-      return res.status(200).json({ message: `Game ${gameId} removed from collection` });
     } else {
       return res.status(404).json({ error: 'Game not found in user collection' });
     }

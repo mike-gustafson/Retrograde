@@ -74,8 +74,7 @@
       </div>
     </div>
     <div class="col-sm-6 col-lg-6 mb-3" style="position: absolute; left: 0%; top: 0px;">
-      <%- include('_user-collection') %>
-      
+      <%- include('_user-collection') %>  
     </div>
     <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
       <div class="card p-1">
@@ -160,5 +159,22 @@ function renderGames(games) {
         row.appendChild(gameCell);
         tableBody.appendChild(row);
     });
+}
+
+async function removeFromCollection(userId, gameId, platformId) {
+  console.log(platformId)
+    try {
+        const response = await fetch('games/remove-from-collection', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, gameId, platformId }),
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
 }
 </script>

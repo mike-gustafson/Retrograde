@@ -1,63 +1,38 @@
-<div class="container-fluid">
-  <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 1wh;">
-    <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
-      <div class="accordion custom-accordion" id="platformAccordion" style="overflow-y: hidden">
-        <% let logoUrl;
-          sortedPlatforms.forEach((platform, index) => {
-          if ((platform.category === 1 || platform.category === 5) && platform.platformLogo) {
-          if (platform.platformLogo) {
-          logoUrl = platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg', 'png');
-          if (logoUrl) {
-          logoUrl = logoUrl.replace('t_thumb', 't_720p');
-          }
-          } else {
-          logoUrl = '';
-          }
-          } else {
-          logoUrl = '';
-          }
-          %>
-
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="heading<%= index %>">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapse<%= index %>" aria-expanded="false" aria-controls="collapse<%= index %>"
-                onclick="loadGames(<%= platform.id %>)">
-                <%= platform.name %>
-              </button>
-            </h2>
-            <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>"
-              data-bs-parent="#platformAccordion">
-              <div class="accordion-body">
+<div class="container-fluid " style="min-height: 80vh; max-width: 90vw;background-color:#1a1a2e; border-radius: 10px;">
+  <div class="row row-cols-2 row-cols-md-3 row-cols-xl-6" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative;">
+    <% sortedPlatforms.forEach((platform, index)=> { %>
+      <div class="col mb-1">
+        <div class=" p-1 h-100">
+          <section class="text-white p-1" style="min-height: 60px;">
+            <% let logoUrl; 
+            if ((platform.category===1 || platform.category===5) && platform.platformLogo) { 
+              if (platform.platformLogo) { 
+                logoUrl=platformLogos.find(logo=> logo.id ===
+                platform.platformLogo)?.url.replace('jpg', 'png');
+                  if (logoUrl) {
+                    logoUrl = logoUrl.replace('t_thumb', 't_720p');
+                  }
+                } else {
+                  logoUrl = '';
+                }
+            } else {
+              logoUrl = '';
+            }
+            %>
+              <div class="d-flex align-items-center">
                 <% if (logoUrl) { %>
-                  <img src="http:<%= logoUrl %>" alt="No logo available" class="img-fluid platform-logo">
-                  <% } else { %>
-                    <div class="placeholder-logo">
-                      <%= platform.name %>
-                    </div>
-                    <% } %>
+                  <img src="http:<%= logoUrl %>" alt="<%= platform.name %> Logo" class="img-fluid platform-logo"
+                    style="max-width: 75px; max-height: 50px;">
+                <% } %>
+                <a href="/platforms/<%= platform.id %>">
+                <h6 class="card-title ms-2 text-center">
                   <%= platform.name %>
+                </h6>
+              </a>
               </div>
-            </div>
-          </div>
-
-          <% }) %>
+          </section>
+        </div>
       </div>
-    </div>
-    <div id="gamesList" class="col-sm-6 col-lg-9 mb-3" style="position: absolute; left: 0%; top: 0px; overflow-y: auto;">
-    </div>
-
+    <% }) %>
   </div>
 </div>
-
-<script>
-  async function loadGames(platformId) {
-    try {
-      const response = await fetch(`/platforms/${platformId}/games`);
-      const gamesHtml = await response.text();
-      document.getElementById('gamesList').innerHTML = gamesHtml;
-    } catch (error) {
-      console.error('Error loading games:', error);
-    }
-  }
-</script>

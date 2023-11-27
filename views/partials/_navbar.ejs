@@ -34,13 +34,13 @@
       <input class="form-control mr-sm-2" id="searchbox" type="text" placeholder="Search" aria-label="Search">
     </form>
   </div>
-  
+
   <%- include('./alerts') %>
-  <% if (!currentUser) {%>
-    <div class="m-2"><a href="/auth/login">Login</a></div>||
-    <div class="m-2"><a href="/auth/signup">Signup</a></div>
-  <% } else { %>
-    <div class="m-2"><a href="/auth/logout">Logout</a></div>
-  <% } %>
+    <% if (!currentUser) {%>
+      <div class="m-2"><a href="/auth/login">Login</a></div>||
+      <div class="m-2"><a href="/auth/signup">Signup</a></div>
+      <% } else { %>
+        <div class="m-2"><a href="/auth/logout">Logout</a></div>
+        <% } %>
 
 </nav>

@@ -54,6 +54,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.JSONB,
       allowNull: true,
     },
+    unique_games_owned: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     games_owned_was_updated: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
