@@ -12,6 +12,20 @@ router.get('/', isLoggedIn, async (req, res) => {
     res.render('profile/profile', { user, userGames, uniqueGames, req });
 })
 
+router.get('/user/:userId/platform/:platformId/game/:gameId/copies-owned-count', isLoggedIn, async (req, res) => {
+    try {
+      const { userId, platformId, gameId } = req.params;
+
+      const count = 5;
+      res.json({ count });
+    } catch (error) {
+      console.error('Error fetching copies-owned count:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  module.exports = router;
+
 router.get('/user', isLoggedIn, async (req, res) => {
     try {
         const { name, email, platforms_owner } = req.user;
