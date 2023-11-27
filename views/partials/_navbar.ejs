@@ -16,25 +16,8 @@
       <li class="nav-item">
         <a class="nav-link" href="/games">Games</a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">Dropdown</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
     </ul>
   </div>
-
-  <div class="collapse navbar-collapse" id="search-bar">
-    <form id="search-form" class="form-inline my-2 my-lg-0">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      <input class="form-control mr-sm-2" id="searchbox" type="text" placeholder="Search" aria-label="Search">
-    </form>
-  </div>
-
   <%- include('./alerts') %>
     <% if (!currentUser) {%>
       <div class="m-2"><a href="/auth/login">Login</a></div>||

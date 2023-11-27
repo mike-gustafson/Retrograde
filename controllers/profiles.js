@@ -5,26 +5,15 @@ const router = express.Router();
 const { User } = require('../models');
 const isLoggedIn = require('../middleware/isLoggedIn');
 const getGamesOwned = require('../utils/get-user-games_owned.util');
+const parsePlatformGamenameObjectIntoStrings = require('../utils/parse-platform-gamename-object into strings');
 
 router.get('/', isLoggedIn, async (req, res) => {
     const user = await User.findOne({ where: { id: req.user.id } });
     const { userGames, uniqueGames } = await getGamesOwned(user);
-    res.render('profile/profile', { user, userGames, uniqueGames, req });
+    const wishlist = await parsePlatformGamenameObjectIntoStrings(user.games_wishlist);
+
+    res.render('profile/profile', { user, userGames, uniqueGames, req, wishlist });
 })
-
-router.get('/user/:userId/platform/:platformId/game/:gameId/copies-owned-count', isLoggedIn, async (req, res) => {
-    try {
-      const { userId, platformId, gameId } = req.params;
-
-      const count = 5;
-      res.json({ count });
-    } catch (error) {
-      console.error('Error fetching copies-owned count:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
-  module.exports = router;
 
 router.get('/user', isLoggedIn, async (req, res) => {
     try {

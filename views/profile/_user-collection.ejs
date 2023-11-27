@@ -19,7 +19,8 @@
         </h6>
         <table class="table-dark table-bordered table-striped" id="gameTable" style="width: 100%;">
             <col style="width:25%">
-            <col style="width:75%">
+            <col style="width:60%">
+            <col style="width:15%">
             <thead>
                 <tr>
                     <th>Platform</th>
@@ -33,30 +34,35 @@
                 <% const startIdx=(currentPage - 1) * itemsPerPage; %>
                 <% const endIdx=startIdx + itemsPerPage; %>
                 <% const displayedGames=userGames.slice(startIdx, endIdx); %>
+                <% let copyCount=1; %>
+                <% for (i=0; i<userGames.length; i++) { %>
+                    <% console.log(userGames,'userGames beforte fileter') %>
+                    <% copyCount = userGames.filter(id=> id === userGames[i].id).length %>
 
-                <% displayedGames.forEach(game=> { %>
-                <tr class="text-secondary" data-platform="<%= game.platform %>">
+
+                <tr class="text-secondary" data-platform="<%= userGames[i].platform %>">
                     <td>
-                    <%= game.platform %>
+                    <%= userGames[i].platform %>
                     </td>
                     <td>
-                    <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
-                        <%= game.game %>
+                    <a href="/games/byId/<%= userGames[i].id %>/?_method=PUT" method="POST">
+                        <%= userGames[i].game %>
                     </a>
                     </td>
                     <td>
-                        <% const platformIdArray = Object.keys(user.games_owned) %>
-                        <button class="btn btn-danger" onclick="removeFromCollection(<%= user.id %>, <%= game.id %>, <%= platformIdArray %>)">
-                            <i class="bi bi-trash"></i> Remove
-                        </button>
+                        <section>
+                            <% console.log(userGames[i].platformId) %>
+                            <button onclick="addToCollection(<%= user.id %>, <%= userGames[i].id %>, <%= userGames[i].platformId %>, <%= copyCount %>)">+1</button>
+                            <button onclick="removeFromCollection(<%= user.id %>, <%= userGames[i].id %>, <%= userGames[i].platformId %>, <%= copyCount %>)">-1</button>`
+                        </section>
                     </td>
                 </tr>
-                <% }); %>
+                <% }; %>
             </tbody>
         </table>
 
         <nav aria-label="Page navigation">
-            <ul class="pagination-dark">
+            <ul class="pagination-dark text-white">
                 <% for (let i=1; i <=totalPages; i++) { %>
                     <li class="page-item <%= currentPage == i ? 'active' : '' %>">
                         <a class="page-link" href="?page=<%= i %>">

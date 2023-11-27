@@ -140,4 +140,52 @@ router.post('/remove-from-collection', async (req, res) => {
   }
 });
 
+router.post('/add-to-wishlist', async (req, res) => {
+  const { userId, gameId, platformId } = req.body;
+  try {
+    let user = await User.findOne({ where: { id: userId } });
+    if (!user.games_wishlist) { 
+      user.games_wishlist = {}; }
+    if (!user.games_wishlist[platformId]) { 
+      user.games_wishlist[platformId] = [gameId]; 
+    } else { 
+      user.games_wishlist[platformId].push(gameId); 
+    }
+    user.games_wishlist_was_updated = true;
+    user.changed('games_wishlist', true); // !IMPORTANT! required to get an object to update in PSQL
+    await user.save();
+    return res.status(200).json({ message: `Game ${gameId} added to wishlist` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/remove-from-wishlist', async (req, res) => {
+  const { userId, gameId, platformId } = req.body;
+  try {
+    let user = await User.findOne({ where: { id: userId } });
+    if (user.games_wishlist && user.games_wishlist[platformId]) {
+      const gameIndex = user.games_wishlist[platformId].indexOf(gameId);
+      if (gameIndex !== -1) {
+        user.games_wishlist[platformId].splice(gameIndex, 1); // Remove one copy
+        if (user.games_wishlist[platformId].length === 0) {
+          delete user.games_wishlist[platformId];
+        }
+        user.games_wishlist_was_updated = true;
+        user.changed('games_wishlist', true);
+        await user.save();
+        return res.status(200).json({ message: `One copy of game ${gameId} removed from wishlist` });
+      } else {
+        return res.status(404).json({ error: 'Game not found in user wishlist' });
+      }
+    } else {
+      return res.status(404).json({ error: 'Game not found in user wishlist' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;

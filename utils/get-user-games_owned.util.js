@@ -1,5 +1,4 @@
 const { Platform, Game } = require('../models');
-const user = require('../models/user');
 
 async function getGamesOwned(useracct) {
     let userGames = [];
@@ -23,11 +22,11 @@ async function getGamesOwned(useracct) {
                     const gameCount = gameCounts[gameId];
 
                     if (gameCount === 1) {
-                        userGames.push({ platform: platform.name, game: game.name, id: gameId });
+                        userGames.push({ platform: platform.name, game: game.name, id: gameId, platformId: platform.id});
                         uniqueGames++;
                     } else {
                         const gameNameWithCount = `(${gameCount}) ${game.name}`;
-                        userGames.push({ platform: platform.name, game: gameNameWithCount, id: gameId });
+                        userGames.push({ platform: platform.name, game: gameNameWithCount, id: gameId, platformId: platform.id});
                         uniqueGames++;
                     }
                 }));

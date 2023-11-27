@@ -1,4 +1,3 @@
-
 <div class="container-fluid">
   <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 1wh;">
     <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
@@ -74,7 +73,7 @@
       </div>
     </div>
     <div class="col-sm-6 col-lg-6 mb-3" style="position: absolute; left: 0%; top: 0px;">
-      <%- include('_user-collection') %>  
+      <%- include('_user-collection') %>
     </div>
     <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
       <div class="card p-1">
@@ -83,22 +82,22 @@
             <i class="material-icons text-info mr-2">Top Systems</i>
           </h6>
           <table class="table-dark table-bordered" style="width: 100%;"></table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Platform</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Console 1</td>
-                <td>Type 1</td>
-              </tr>
-              <tr>
-                <td>Console 2</td>
-                <td>Type 2</td>
-              </tr>
-            </tbody>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Platform</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Console 1</td>
+              <td>Type 1</td>
+            </tr>
+            <tr>
+              <td>Console 2</td>
+              <td>Type 2</td>
+            </tr>
+          </tbody>
           </table>
         </section>
         <section class="card-body text-white">
@@ -113,27 +112,37 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Game 1</td>
-                <td>Platform 1</td>
-              </tr>
+              <% wishlist.forEach(game=> { %>
+                <tr>
+                  <td>
+                    <%= game[1] %>
+                  </td>
+                  <td>
+                    <%= game[0] %>
+                  </td>
+                </tr>
+                <% }) %>
             </tbody>
           </table>
         </section>
       </div>
     </div>
+  </div>
+</div>
+
+
 
 <script>
   function filterTable(userGames) {
     console.log(userGames, 'userGames');
     const selectedPlatform = document.getElementById('platformFilter').value;
-    console.log(userGames,'userGames beforte fileter')
+    console.log(userGames, 'userGames beforte fileter')
     const filteredGames = selectedPlatform === 'all' ? userGames : userGames.filter(game => game.platform === selectedPlatform);
     console.log(filteredGames, 'filtered games');
     renderGames(filteredGames);
-}
+  }
 
-function renderGames(games) {
+  function renderGames(games) {
     const itemsPerPage = 20;
     const currentPage = 1;
 
@@ -144,37 +153,71 @@ function renderGames(games) {
     tableBody.innerHTML = '';
 
     displayedGames.forEach(game => {
-        const row = document.createElement('tr');
-        row.classList.add('text-secondary');
-        row.setAttribute('data-platform', game.platform);
-        const platformCell = document.createElement('td');
-        platformCell.textContent = game.platform;
-        row.appendChild(platformCell);
-        const gameCell = document.createElement('td');
-        const gameLink = document.createElement('a');
-        gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
-        gameLink.method = 'POST';
-        gameLink.textContent = game.game;
-        gameCell.appendChild(gameLink);
-        row.appendChild(gameCell);
-        tableBody.appendChild(row);
+      const row = document.createElement('tr');
+      row.classList.add('text-secondary');
+      row.setAttribute('data-platform', game.platform);
+      const platformCell = document.createElement('td');
+      platformCell.textContent = game.platform;
+      row.appendChild(platformCell);
+      const gameCell = document.createElement('td');
+      const gameLink = document.createElement('a');
+      gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
+      gameLink.method = 'POST';
+      gameLink.textContent = game.game;
+      gameCell.appendChild(gameLink);
+      row.appendChild(gameCell);
+      tableBody.appendChild(row);
     });
-}
+  }
 
-async function removeFromCollection(userId, gameId, platformId) {
-  console.log(platformId)
+  async function addToCollection(userId, gameId, platformId, copyCount) {
     try {
-        const response = await fetch('games/remove-from-collection', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, gameId, platformId }),
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
+      const response = await fetch('/games/add-to-collection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, gameId, platformId }),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      copyCount++;
+      const data = await response.json();
+      console.log('Game added to collection:', data);
+      updateCopiesOwnedCell(userId, platformId, gameId, copyCount);
+
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
+      console.error('There was a problem with the fetch operation:', error);
     }
-}
+  }
+
+  async function removeFromCollection(userId, gameId, platformId) {
+    console.log(platformId)
+    try {
+      const response = await fetch('games/remove-from-collection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, gameId, platformId }),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+
+  function updateCopiesOwnedCell(userId, platformId, gameId, copyCount) {
+    const cellId = `copies-owned-${platformId}-${gameId}`;
+    const cell = document.getElementById(cellId);
+
+    if (cell) {
+      if (copyCount === 0) {
+        cell.innerHTML = `<button onclick="addToCollection(${userId}, ${gameId}, ${platformId}, ${copyCount})">Add to Collection</button>`;
+      } else {
+        cell.innerHTML = `${copyCount} owned <button onclick="addToCollection(${userId}, ${gameId}, ${platformId}, ${copyCount})">+1</button>
+                  <button onclick="removeFromCollection(${userId}, ${gameId}, ${platformId}, ${copyCount})">-1</button>`
+      }
+    }
+  }
 </script>

@@ -63,7 +63,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     games_wishlist: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    games_wishlist_was_updated: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
     games_ratings: {

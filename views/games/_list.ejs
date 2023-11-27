@@ -36,8 +36,13 @@
                   <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">Add to Collection</button>
                 <% } %>
               </td>
-              <td><input type="checkbox" <%=user && user.games_wishlist && user.games_wishlist.includes(game.id)
-                  ? 'checked' : '' %> ></td>
+              <td>
+                <% if (user && user.games_wishlist && user.games_wishlist[platform.id] && user.games_wishlist[platform.id].includes(game.id)) { %>
+                  <button id="wishlist-button-<%= game.id %>" onclick="removeFromWishlist(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Remove Wishlist</button>
+                <% } else { %>
+                  <button id="wishlist-button-<%= game.id %>" onclick="addToWishlist(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Add to Wishlist</button>
+                <% } %>
+              </td>
               <td></td> 
             </tr>
             <% }); %>
@@ -55,7 +60,6 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, gameId, platformId }),
     });
-
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -105,4 +109,59 @@ function updateCopiesOwnedCell(userId, platformId, gameId, copyCount) {
   }
 }
 
+  async function addToWishlist(userId, gameId, platformId) {
+    try {
+      const response = await fetch('/games/add-to-wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, gameId, platformId }),
+      }); 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('Game added to wishlist:', data);
+      updateWishlistButton(userId, gameId, platformId, true);
+
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+
+  async function removeFromWishlist(userId, gameId, platformId) {
+    try {
+      const response = await fetch('/games/remove-from-wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, gameId, platformId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data.message);
+      updateWishlistButton(userId, gameId, platformId, false);
+
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+
+  function updateWishlistButton(userId, gameId, platformId, inWishlist) {
+    const buttonId = `wishlist-button-${gameId}`;
+    const button = document.getElementById(buttonId);
+
+    if (button) {
+      if (inWishlist) {
+        button.innerHTML = 'Remove Wishlist';
+        button.onclick = () => removeFromWishlist(userId, gameId, platformId);
+      } else {
+        button.innerHTML = 'Add to Wishlist';
+        button.onclick = () => addToWishlist(userId, gameId, platformId);
+      }
+    }
+  }
 </script>

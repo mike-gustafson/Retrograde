@@ -3,7 +3,6 @@ const router = express.Router();
 const { Platform, PlatformLogo, Game, User } = require('../models');
 const sortData = require('../utils/sort-data.util');
 const isLoggedIn = require('../middleware/isLoggedIn');
-const getGamesOwned = require('../utils/get-user-games_owned.util');
 
 router.get("/", async (req, res) => {
     try {

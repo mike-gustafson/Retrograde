@@ -48,7 +48,6 @@ app.use('/auth', require('./controllers/auth'));
 
 app.get('/', async (req, res) => {
   const platforms = await Platform.findAll();
-  console.log(platforms, 'platforms')
   res.render('homepage', { platforms });
 })
 
