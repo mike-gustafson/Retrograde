@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const request = require('supertest');
-const app = require('../server');
-const db = require('../models');
+const app = require('../../server');
+const db = require('../../models');
 
 before(function(done) {
   db.sequelize.sync({ force: true }).then(function() {
@@ -83,8 +83,8 @@ describe('Auth Controller', function() {
 });
 const expect = require('chai').expect;
 const request = require('supertest');
-const app = require('../server');
-const db = require('../models');
+const app = require('../../server');
+const db = require('../../models');
 
 before(function(done) {
   db.sequelize.sync({ force: true }).then(function() {
@@ -173,6 +173,37 @@ describe('Auth Controller', function() {
       request(app).get('/auth/logout')
       .expect('Location', '/')
       .expect(302, done);
+    });
+  });
+});describe('Auth Controller', function() {
+  // Existing test cases...
+
+  describe('POST /auth/signup', function() {
+    // Existing test cases...
+
+    it('should redirect to /auth/signup on existing email', function(done) {
+      request(app).post('/auth/signup')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          email: 'test@butts.co',
+          name: 'John Doe',
+          password: 'password123'
+        })
+        .expect('Location', '/auth/signup')
+        .expect(302, done);
+    });
+  });
+
+  // New test case for successObject
+  describe('successObject', function() {
+    it('should have the correct properties', function() {
+      const successObject = {
+        successRedirect: '/',
+        successFlash: `Welcome ${_user.name}. Account was created and logging in...`
+      };
+
+      expect(successObject).to.have.property('successRedirect').that.equals('/');
+      expect(successObject).to.have.property('successFlash').that.equals(`Welcome ${_user.name}. Account was created and logging in...`);
     });
   });
 });

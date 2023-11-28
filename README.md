@@ -25,6 +25,124 @@ Track your collection, create top-10 lists, Share your wishlist with others, See
 | createdAt | Date | Auto-generated |
 | updatedAt | Date | Auto-generated |
 
+## Users Table
+
+| Column                   | Type                     | Nullable | Default                                   |
+|--------------------------|--------------------------|----------|-------------------------------------------|
+| id                       | integer                  | not null | nextval('users_id_seq'::regclass)        |
+| name                     | character varying(255)   |          |                                           |
+| email                    | character varying(255)   |          |                                           |
+| password                 | character varying(255)   |          |                                           |
+| createdAt                | timestamp with time zone | not null |                                           |
+| updatedAt                | timestamp with time zone | not null |                                           |
+| games_followed           | integer[]                |          |                                           |
+| games_ratings            | integer[]                |          |                                           |
+| platforms_owned          | integer[]                |          |                                           |
+| platforms_wishlist       | integer[]                |          |                                           |
+| platforms_followed       | integer[]                |          |                                           |
+| platforms_ranked         | integer[]                |          |                                           |
+| games_owned              | jsonb                    |          |                                           |
+| games_owned_prev         | jsonb                    |          |                                           |
+| games_owned_was_updated  | boolean                  |          |                                           |
+| unique_games_owned       | integer                  |          |                                           |
+| games_wishlist_was_updated| boolean                  |          |                                           |
+| games_wishlist           | jsonb                    |          |                                           |
+
+
+## Platforms Table
+
+| Column           | Type                   | Nullable | Default |
+|------------------|------------------------|----------|---------|
+| id               | integer                | not null |         |
+| abbreviation     | character varying(255) |          |         |
+| alternative_name | character varying(255) |          |         |
+| category         | integer                |          |         |
+| name             | character varying(255) |          |         |
+| summary          | text                   |          |         |
+| slug             | character varying(255) |          |         |
+| generation       | integer                |          |         |
+| platform_logo    | integer                |          |         |
+| platform_family  | integer                |          |         |
+
+## Platform Logos Table
+
+| Column        | Type                   | Nullable | Default |
+|---------------|------------------------|----------|---------|
+| id            | integer                | not null |         |
+| alpha_channel | boolean                |          |         |
+| animated      | boolean                |          |         |
+| checksum      | character varying(255) |          |         |
+| height        | integer                |          |         |
+| url           | character varying(255) |          |         |
+| width         | integer                |          |         |
+| image_id      | character varying(255) |          |         |
+
+
+## Games Table
+
+| Column                  | Type                   | Collation | Nullable | Default |
+|-------------------------|------------------------|-----------|----------|---------|
+| age_ratings             | integer[]              |           |          |         |
+| aggregated_rating       | double precision       |           |          |         |
+| aggregated_rating_count | integer                |           |          |         |
+| alternative_names       | integer[]              |           |          |         |
+| artworks                | integer[]              |           |          |         |
+| bundles                 | integer[]              |           |          |         |
+| category                | integer                |           |          |         |
+| checksum                | uuid                   |           |          |         |
+| collection              | integer                |           |          |         |
+| collections             | integer[]              |           |          |         |
+| cover                   | integer                |           |          |         |
+| created_at              | bigint                 |           |          |         |
+| dlcs                    | integer[]              |           |          |         |
+| expanded_games          | integer[]              |           |          |         |
+| expansions              | integer[]              |           |          |         |
+| external_games          | integer[]              |           |          |         |
+| first_release_date      | bigint                 |           |          |         |
+| follows                 | integer                |           |          |         |
+| forks                   | integer[]              |           |          |         |
+| franchise               | integer                |           |          |         |
+| franchises              | integer[]              |           |          |         |
+| game_engines            | integer[]              |           |          |         |
+| game_localizations      | integer[]              |           |          |         |
+| game_modes              | integer[]              |           |          |         |
+| genres                  | integer[]              |           |          |         |
+| hypes                   | integer                |           |          |         |
+| involved_companies      | integer[]              |           |          |         |
+| keywords                | integer[]              |           |          |         |
+| language_supports       | integer[]              |           |          |         |
+| multiplayer_modes       | integer[]              |           |          |         |
+| name                    | character varying(255) |           |          |         |
+| parent_game             | integer                |           |          |         |
+| platforms               | integer[]              |           |          |         |
+| player_perspectives     | integer[]              |           |          |         |
+| ports                   | integer[]              |           |          |         |
+| rating                  | double precision       |           |          |         |
+| rating_count            | integer                |           |          |         |
+| release_dates           | integer[]              |           |          |         |
+| remakes                 | integer[]              |           |          |         |
+| remasters               | integer[]              |           |          |         |
+| screenshots             | integer[]              |           |          |         |
+| similar_games           | integer[]              |           |          |         |
+| slug                    | character varying(255) |           |          |         |
+| standalone_expansions   | integer[]              |           |          |         |
+| status                  | integer                |           |          |         |
+| storyline               | text                   |           |          |         |
+| summary                 | text                   |           |          |         |
+| tags                    | integer[]              |           |          |         |
+| themes                  | integer[]              |           |          |         |
+| total_rating            | double precision       |           |          |         |
+| total_rating_count      | integer                |           |          |         |
+| updated_at              | bigint                 |           |          |         |
+| url                     | character varying(255) |           |          |         |
+| version_parent          | integer                |           |          |         |
+| version_title           | character varying(255) |           |          |         |
+| videos                  | integer[]              |           |          |         |
+| websites                | integer[]              |           |          |         |
+| id                      | integer                |           |          |         |
+
+
+
 ### Default Routes
 
 | Method | Path | Location | Purpose |
@@ -116,30 +234,71 @@ sequelize db:create
 |   └── platforms.js
 |   └── profiles.js
 |   └── random-quotes.js
+|-- data
+|   └── quotes.json
+|-- middleware
+|   └── fetchPlatformsFromLocal.js
+|   └── isLoggedIn.js
+|-- migrations
+|   └── ...
 ├── models
+|   └── games.js
 │   └── index.js
+|   └── platform-logo.js
+|   └── platform.js
+|   └── user.js
 ├── node_modules
 │   └── ...
 ├── public
 │   └── assets
 │   └── css
 │       └── style.css
+|   └── javascript
 ├── test
-│   └── auth.test.js
+|   └── controllers
+│       └── auth.test.js
+│       └── games.test.js
+│       └── platforms.test.js
+│       └── profiles.test.js
+│       └── random-quotes.js
 │   └── index.test.js
-│   └── profile.test.js
 │   └── user.test.js
+|-- utils
+│   └── get-user-games-owned.util.js
+│   └── parse-platform-gamename-object into strings.js
+│   └── random-number-generator.util.js
+│   └── sort-data.util.js
 ├── views
 │   └── auth
 │       └── login.ejs
 │       └── signup.ejs
-│   └── index.ejs
+│   └── games
+│       └── _list.ejs
+│       └── details.ejs
+│       └── games.ejs
+│       └── index.ejs
+│   └── partials
+│       └── _footer.ejs
+│       └── _navbar.ejs
+│       └── alerts.ejs
+│   └── platforms
+│       └── details.ejs
+│       └── index.ejs
+│   └── profile
+│       └── _user-collection.ejs
+│       └── profile.ejs
+│       └── profile.js
+│   └── homepage.ejs
 │   └── layout.ejs
-│   └── profile.ejs
+│   └── scripts.ejs
+│   └── styles.ejs
+|-- .env
 ├── .gitignore
+|-- database.js
 ├── package-lock.json
 ├── package.json
 ├── README.md
+|-- readme2.md
 ├── server.js
 ```
 

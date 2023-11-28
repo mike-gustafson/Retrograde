@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const request = require('supertest');
 const fs = require('fs');
-const app = require('../server');
+const app = require('../../server');
 
 describe('Random Quotes Controller', function() {
   describe('GET /random-quote', function() {
