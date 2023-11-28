@@ -1,7 +1,5 @@
-
 <div class="card p-1">
     <section class="p-1 table-responsive" style="max-height: 100em; overflow-y: scroll">
-
         <h6 class="d-flex align-items-center mb-1">
             <i class="material-icons text-info mr-2">Collection</i>
             <%= uniqueGames %> Titles
@@ -38,8 +36,6 @@
                 <% for (i=0; i<userGames.length; i++) { %>
                     <% console.log(userGames,'userGames beforte fileter') %>
                     <% copyCount = userGames.filter(id=> id === userGames[i].id).length %>
-
-
                 <tr class="text-secondary" data-platform="<%= userGames[i].platform %>">
                     <td>
                     <%= userGames[i].platform %>
@@ -60,7 +56,6 @@
                 <% }; %>
             </tbody>
         </table>
-
         <nav aria-label="Page navigation">
             <ul class="pagination-dark text-white">
                 <% for (let i=1; i <=totalPages; i++) { %>
@@ -72,43 +67,5 @@
                     <% } %>
             </ul>
         </nav>
-
     </section>
 </div>
-<script>
-    function filterTable(userGames) {
-    const selectedPlatform = document.getElementById('platformFilter').value;
-    const filteredGames = selectedPlatform === 'all' ? userGames : userGames.filter(game => game.platform === selectedPlatform);
-    renderGames(filteredGames);
-}
-
-function renderGames(games) {
-    const itemsPerPage = 20;
-    const currentPage = 1;
-
-    const startIdx = (currentPage - 1) * itemsPerPage;
-    const endIdx = startIdx + itemsPerPage;
-    const displayedGames = games.slice(startIdx, endIdx);
-    const tableBody = document.querySelector('#gameTable tbody');
-    tableBody.innerHTML = '';
-
-    displayedGames.forEach(game => {
-        const row = document.createElement('tr');
-        row.classList.add('text-secondary');
-        row.setAttribute('data-platform', game.platform);
-        const platformCell = document.createElement('td');
-        platformCell.textContent = game.platform;
-        row.appendChild(platformCell);
-        const gameCell = document.createElement('td');
-        const gameLink = document.createElement('a');
-        gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
-        gameLink.method = 'POST';
-        gameLink.textContent = game.game;
-        gameCell.appendChild(gameLink);
-        row.appendChild(gameCell);
-        tableBody.appendChild(row);
-    });
-}
-
-
-</script>

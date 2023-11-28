@@ -35,7 +35,18 @@ Track your collection, create top-10 lists, Share your wishlist with others, See
 | POST | /auth/login | auth.js | Login user |
 | POST | /auth/signup | auth.js | Creates User |
 | GET | /auth/logout | auth.js | Removes session info |
-| GET | /profile | server.js | Regular User Profile |
+| GET | /games | games.js | Gets all Games |
+| GET | /games/byId/:gameId | games.js | Fetches One Game |
+| POST | /games/add-to-collection | games.js | Adds a game to Users Collection |
+| POST | /games/remove-from-collection | games.js | Removes a game from Users Collection |
+| POST | /games/add-to-wishlist | games.js | Adds a game to Users Wishlist |
+| POST | /games/remove-from-wishlist | games.js | Removes a game from Users Wishlist |
+| GET | /platforms | platforms.js | Gets all Systems |
+| GET | /platforms/:platformId/games | platforms.js | Fetches all Games for a System |
+| GET | /platforms/:platformId | platforms.js | System Details Page |
+| GET | /profile | profiles.js | Regular User Profile |
+| GET | /profile/user | profiles.js | Get user info |
+| GET | /random-quote | random-quotes.js | Gets Random Quote for Homepage |
 
 ## `1` Fork & Clone Project & Install Dependencies
 `1` The first thing that we are going to do is `fork` and `clone`
@@ -98,8 +109,13 @@ sequelize db:create
 ```text
 ├── config
 │   └── config.json
+|   └── ppConfig.js
 ├── controllers
 │   └── auth.js
+|   └── games.js
+|   └── platforms.js
+|   └── profiles.js
+|   └── random-quotes.js
 ├── models
 │   └── index.js
 ├── node_modules

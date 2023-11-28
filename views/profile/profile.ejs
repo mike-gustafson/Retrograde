@@ -220,4 +220,40 @@
       }
     }
   }
+
+  function filterTable(userGames) {
+    const selectedPlatform = document.getElementById('platformFilter').value;
+    const filteredGames = selectedPlatform === 'all' ? userGames : userGames.filter(game => game.platform === selectedPlatform);
+    renderGames(filteredGames);
+}
+
+function renderGames(games) {
+    const itemsPerPage = 20;
+    const currentPage = 1;
+
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const displayedGames = games.slice(startIdx, endIdx);
+    const tableBody = document.querySelector('#gameTable tbody');
+    tableBody.innerHTML = '';
+
+    displayedGames.forEach(game => {
+        const row = document.createElement('tr');
+        row.classList.add('text-secondary');
+        row.setAttribute('data-platform', game.platform);
+        const platformCell = document.createElement('td');
+        platformCell.textContent = game.platform;
+        row.appendChild(platformCell);
+        const gameCell = document.createElement('td');
+        const gameLink = document.createElement('a');
+        gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
+        gameLink.method = 'POST';
+        gameLink.textContent = game.game;
+        gameCell.appendChild(gameLink);
+        row.appendChild(gameCell);
+        tableBody.appendChild(row);
+    });
+}
+
+
 </script>

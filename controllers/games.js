@@ -63,32 +63,6 @@ router.get('/byId/:gameId', async (req, res) => {
   }
 });
 
-// GET /games/:platformId - fetch all games on a single platform
-router.get('/:platformId', async (req, res) => {
-  try {
-    const platformId = req.params.platformId;
-
-    let platform = {};
-    if (req.query.platformName) {
-      platform.name = req.query.platformName;
-    } else {
-      platform = await Platform.findByPk(platformId);
-    }
-
-    const games = await Game.findAll({
-      where: {
-        platforms: [platformId]
-      },
-    });
-    const sortedGames = sortData(games, 'alphaUp');
-
-    res.render("games/index", { sortedGames, platform });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
 // POST /games/add-to-collection/:gameId - fetch a single game by ID and add it to the user's collection
 router.post('/add-to-collection', async (req, res) => {
   const { userId, gameId, platformId } = req.body;

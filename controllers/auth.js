@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const passport = require('../config/ppConfig');
 
-
 // import models
 const { user } = require('../models');
 
@@ -56,6 +55,5 @@ router.post('/signup', async (req, res) => {
         res.redirect('/auth/signup');
   }
 });
-
 
 module.exports = router;
