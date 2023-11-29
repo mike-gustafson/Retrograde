@@ -11,6 +11,12 @@ const app = express();
 const path = require('path');
 const passport = require('./config/ppConfig');
 const { Game, Platform, PlatformLogo, User } = require('./models');
+const headers = {
+  'Accept': process.env.HEADER_ACCEPT,
+  'Client-ID': process.env.HEADER_CLIENT_ID,
+  'Authorization': process.env.HEADER_AUTHORIZATION,
+  'Content-Type': process.env.HEADER_CONTENT_TYPE,
+};
 
 app.use(layouts);
 app.use(flash());
@@ -165,32 +171,17 @@ async function fetchAndUpdatePlatformLogos() {
 
 app.get('/updatePlatforms', async (req, res) => {
   try {
-    // Fetch platforms from the API
-    const response = await axios.post(
-      'https://api.igdb.com/v4/platforms',
-      'fields *; limit 500; sort id asc;',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Client-ID': 'mtos002sejiyk8rra7wr9i0cjeq4fk',
-          'Authorization': 'Bearer k54046h0mmd74wexbb3r2kmr6aatah',
-        },
-      }
-    );
-
+    const response = await fetch('https://api.igdb.com/v4/platforms', {
+      method: 'post',
+      headers: headers,
+      body: 'fields *; limit 500; sort id asc;',
+    });
     const platformsData = response.data;
-console.log('Fetched '+platformsData.length+' platforms   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-    // If data is empty, stop the process
     if (platformsData.length === 0) {
       console.log('No more platforms to fetch.');
       return res.status(200).json({ message: 'No more platforms to fetch.' });
     }
-console.log(platformsData)
-    // Update the database with the fetched platform data
-    console.log('Updating platforms...');
     await Platform.bulkCreate(platformsData);
-    
-console.log('Platforms updated   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     res.status(200).json({ message: 'Platform update complete.' });
   } catch (error) {
     console.error('Error updating platforms:', error);
