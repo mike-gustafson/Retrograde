@@ -1,7 +1,7 @@
 {
-  "name": "express_authentication",
+  "name": "RetroGrade",
   "version": "1.0.0",
-  "description": "Express authentication template using Passport + Flash messages + custom middleware",
+  "description": "A retro video game collecting app",
   "main": "server.js",
   "directories": {
     "test": "test"
