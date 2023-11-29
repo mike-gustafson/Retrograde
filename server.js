@@ -162,6 +162,39 @@ async function fetchAndUpdatePlatformLogos() {
     console.error('Error fetching and updating platform logos:', error);
   }
 }
+
+app.get('/updatePlatforms', async (req, res) => {
+  try {
+    // Fetch platforms from the API
+    const response = await axios.post(
+      'https://api.igdb.com/v4/platforms',
+      'fields *; limit 500; sort id asc;',
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Client-ID': 'mtos002sejiyk8rra7wr9i0cjeq4fk',
+          'Authorization': 'Bearer k54046h0mmd74wexbb3r2kmr6aatah',
+        },
+      }
+    );
+
+    const platformsData = response.data;
+
+    // If data is empty, stop the process
+    if (platformsData.length === 0) {
+      console.log('No more platforms to fetch.');
+      return res.status(200).json({ message: 'No more platforms to fetch.' });
+    }
+
+    // Update the database with the fetched platform data
+    await Platform.bulkCreate(platformsData);
+
+    res.status(200).json({ message: 'Platform update complete.' });
+  } catch (error) {
+    console.error('Error updating platforms:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 //---------------------------------------------------------------------------------------------------------
 const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
