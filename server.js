@@ -10,7 +10,7 @@ const axios = require('axios');
 const app = express();
 const path = require('path');
 const passport = require('./config/ppConfig');
-const { Game, Platform, user } = require('./models');
+const { Game, Platform, PlatformLogo, User } = require('./models');
 
 app.use(layouts);
 app.use(flash());
@@ -52,18 +52,7 @@ app.get('/', async (req, res) => {
   res.render('homepage', { platforms });
 })
 //-------------------------------------------------------------------------------------------------
-const knex = require('knex');
 
-const db = knex({
-  client: 'pg',
-  connection: {
-    host: 'ec2-44-206-204-65.compute-1.amazonaws.com',
-    user: 'Mike',
-    password: 'Gust@fson316',
-    database: 'retrograde',
-    charset: 'utf8',
-  },
-});
 function sanitizeTitle(title) {
   if (title) {
     return title.replace(/[^\x00-\x7F]/g, ''); // This regex removes non-ASCII characters
@@ -105,7 +94,7 @@ const sanitizedGamesData = gamesData.map(game => ({
   version_title: sanitizeTitle(game.version_title),
 }));
     // Update the database with the fetched data
-    await db('games').insert(sanitizedGamesData);
+    await Game.create(sanitizedGamesData);
 
 
 // Call the function recursively with the next offset after a 5-second pause
@@ -163,7 +152,7 @@ async function fetchAndUpdatePlatformLogos() {
     }));
 
     // Update the database with the fetched data
-    await db('platform_logos').insert(sanitizedPlatformLogosData);
+    await PlatformLogo.create(sanitizedPlatformLogosData);
 
     // Call the function recursively after a 5-second pause
     setTimeout(async () => {
