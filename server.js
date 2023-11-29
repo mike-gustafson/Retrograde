@@ -5,6 +5,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const layouts = require('express-ejs-layouts');
 const methodOverride = require('method-override')
+const axios = require('axios');
 
 const app = express();
 const path = require('path');
