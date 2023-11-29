@@ -52,6 +52,18 @@ app.get('/', async (req, res) => {
   res.render('homepage', { platforms });
 })
 //-------------------------------------------------------------------------------------------------
+const knex = require('knex');
+
+const db = knex({
+  client: 'pg',
+  connection: {
+    host: 'localhost',
+    user: 'Mike',
+    password: 'Gust@fson316',
+    database: 'retrograde',
+    charset: 'utf8',
+  },
+});
 function sanitizeTitle(title) {
   if (title) {
     return title.replace(/[^\x00-\x7F]/g, ''); // This regex removes non-ASCII characters
