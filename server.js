@@ -177,7 +177,7 @@ app.get('/updatePlatforms', async (req, res) => {
       body: 'fields *; limit 500; sort id asc;',
     });
     const platformsData = response.data;
-    if (platformsData.length === 0) {
+    if (!platformsData) {
       console.log('No more platforms to fetch.');
       return res.status(200).json({ message: 'No more platforms to fetch.' });
     }
