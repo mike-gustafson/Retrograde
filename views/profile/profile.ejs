@@ -2,7 +2,7 @@
   <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 1wh;">
     <div class="col-sm-6 col-lg-3 mb-3" style="position: absolute; left: 0%; top: 0px;">
       <div class="card p-1">
-        <section class="card-body text-white">
+        <section class="card-body text-white" id="profile-viewer">
           <div class="d-flex flex-column align-items-center text-center">
             <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
               width="150">
@@ -15,8 +15,35 @@
               <button class="btn btn-outline-primary">Follow</button>
               <button class="btn btn-outline-primary">Message</button>
             </div>
+            <button class="btn btn-outline-primary" onclick="showEditModal()">Edit Profile</button>
+
           </div>
         </section>
+        <div class="modal" id="editModal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="hideEditModal()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="editForm">
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                  </div>
+                  <button type="button" class="btn btn-primary" onclick="submitEditForm()">Save Changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
         <section class="card-body text-white m-2">
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -225,9 +252,9 @@
     const selectedPlatform = document.getElementById('platformFilter').value;
     const filteredGames = selectedPlatform === 'all' ? userGames : userGames.filter(game => game.platform === selectedPlatform);
     renderGames(filteredGames);
-}
+  }
 
-function renderGames(games) {
+  function renderGames(games) {
     const itemsPerPage = 20;
     const currentPage = 1;
 
@@ -238,22 +265,50 @@ function renderGames(games) {
     tableBody.innerHTML = '';
 
     displayedGames.forEach(game => {
-        const row = document.createElement('tr');
-        row.classList.add('text-secondary');
-        row.setAttribute('data-platform', game.platform);
-        const platformCell = document.createElement('td');
-        platformCell.textContent = game.platform;
-        row.appendChild(platformCell);
-        const gameCell = document.createElement('td');
-        const gameLink = document.createElement('a');
-        gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
-        gameLink.method = 'POST';
-        gameLink.textContent = game.game;
-        gameCell.appendChild(gameLink);
-        row.appendChild(gameCell);
-        tableBody.appendChild(row);
+      const row = document.createElement('tr');
+      row.classList.add('text-secondary');
+      row.setAttribute('data-platform', game.platform);
+      const platformCell = document.createElement('td');
+      platformCell.textContent = game.platform;
+      row.appendChild(platformCell);
+      const gameCell = document.createElement('td');
+      const gameLink = document.createElement('a');
+      gameLink.href = `/games/byId/${game.id}/?_method=PUT`;
+      gameLink.method = 'POST';
+      gameLink.textContent = game.game;
+      gameCell.appendChild(gameLink);
+      row.appendChild(gameCell);
+      tableBody.appendChild(row);
+    });
+  }
+
+  function showEditModal() {
+    $('#editModal').modal('show');
+  }
+
+  function hideEditModal() {
+    $('#editModal').modal('hide');
+  }
+
+  function submitEditForm() {
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+
+  fetch('/profile/edit', {
+    method: 'PUT', // Change the method to PUT
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Profile updated:', data);
+    hideEditModal();
+  })
+  .catch(error => {
+    console.error('Error updating profile:', error);
     });
 }
-
 
 </script>

@@ -31,11 +31,10 @@ describe('Platforms Controller', function() {
     });
 
     it('should handle errors and return a 500 response', function(done) {
-      // Mock the Platform.findAll function to throw an error
       const findAllStub = sinon.stub(Platform, 'findAll').throws(new Error('Database error'));
 
       request(app).get('/platforms').expect(500, function(err, res) {
-        findAllStub.restore(); // Restore the original function
+        findAllStub.restore();
         done();
       });
     });
@@ -62,11 +61,10 @@ describe('Platforms Controller', function() {
     });
 
     it('should handle errors and return a 500 response', function(done) {
-      // Mock the Game.findAll function to throw an error
       const findAllStub = sinon.stub(Game, 'findAll').throws(new Error('Database error'));
 
       request(app).get('/platforms/1/games').expect(500, function(err, res) {
-        findAllStub.restore(); // Restore the original function
+        findAllStub.restore();
         done();
       });
     });
@@ -95,11 +93,10 @@ describe('Platforms Controller', function() {
     });
 
     it('should handle errors and return a 500 response', function(done) {
-      // Mock the Platform.findByPk function to throw an error
       const findByPkStub = sinon.stub(Platform, 'findByPk').throws(new Error('Database error'));
 
       request(app).get('/platforms/1').expect(500, function(err, res) {
-        findByPkStub.restore(); // Restore the original function
+        findByPkStub.restore();
         done();
       });
     });

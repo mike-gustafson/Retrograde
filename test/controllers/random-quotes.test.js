@@ -6,7 +6,6 @@ const app = require('../../server');
 describe('Random Quotes Controller', function() {
   describe('GET /random-quote', function() {
     it('should return a random quote and its attribution', function(done) {
-      // Read the quotes file
       fs.readFile(filePath, 'utf-8', (err, data) => {
         if (err) {
           done(err);
@@ -15,7 +14,6 @@ describe('Random Quotes Controller', function() {
           const randomIndex = Math.floor(Math.random() * quotes.length);
           const randomQuote = quotes[randomIndex];
 
-          // Make a request to the endpoint
           request(app)
             .get('/random-quote')
             .expect(200)
@@ -23,7 +21,6 @@ describe('Random Quotes Controller', function() {
               if (err) {
                 done(err);
               } else {
-                // Check if the response matches the random quote
                 expect(res.body).to.deep.equal({
                   quote: randomQuote.quote,
                   attrib: randomQuote.attrib

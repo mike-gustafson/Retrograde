@@ -31,8 +31,10 @@ router.get('/:platformId/games', async (req, res) => {
     const games = await Game.findAll({
       where: {
         platforms: [platformId,],
+        category: 0,
       },
     });
+    console.log(games);
     const sortedGames = sortData(games, 'alphaUp');
 
     res.render('games/_list', { user: loggedInUser, games: sortedGames, platform });
@@ -55,7 +57,8 @@ router.get('/:platformId', isLoggedIn, async (req, res) => {
         });
         const games = await Game.findAll({
           where: {
-            platforms: [platformId]
+            platforms: [platformId],
+            category: 0,
           },
         });
         const sortedGames = sortData(games, 'alphaUp');

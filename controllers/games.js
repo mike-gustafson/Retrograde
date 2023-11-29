@@ -135,7 +135,7 @@ router.post('/add-to-wishlist', async (req, res) => {
   }
 });
 
-router.post('/remove-from-wishlist', async (req, res) => {
+router.delete('/remove-from-wishlist', async (req, res) => {
   const { userId, gameId, platformId } = req.body;
   try {
     let user = await User.findOne({ where: { id: userId } });

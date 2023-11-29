@@ -24,4 +24,25 @@ router.get('/user', isLoggedIn, async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+router.put('/edit', isLoggedIn, async (req, res) => {
+    try {
+      const { name, email } = req.body;   
+      const user = await User.findByPk(req.user.id);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      if (name !== '') { 
+        user.name = name;
+      }
+        if (email !== '') {
+            user.email = email;
+        }
+      await user.save();
+      res.json({ message: 'Profile updated successfully', user: { name: user.name, email: user.email } });
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 module.exports = router;
