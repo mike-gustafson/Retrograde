@@ -188,6 +188,16 @@ app.get('/updatePlatforms', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.get('/updatePlatformLogos', async (req, res) => {
+  try {
+    await fetchAndUpdatePlatformLogos();
+    res.status(200).json({ message: 'Platform logo update complete.' });
+  } catch (error) {
+    console.error('Error updating platform logos:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 //---------------------------------------------------------------------------------------------------------
 const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
