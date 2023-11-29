@@ -57,7 +57,7 @@ const knex = require('knex');
 const db = knex({
   client: 'pg',
   connection: {
-    host: 'localhost',
+    host: 'ec2-44-206-204-65.compute-1.amazonaws.com',
     user: 'Mike',
     password: 'Gust@fson316',
     database: 'retrograde',
