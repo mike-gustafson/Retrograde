@@ -179,7 +179,7 @@ app.get('/updatePlatforms', async (req, res) => {
     );
 
     const platformsData = response.data;
-
+console.log('Fetched '+platformsData.length+' platforms   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     // If data is empty, stop the process
     if (platformsData.length === 0) {
       console.log('No more platforms to fetch.');
