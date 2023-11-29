@@ -2,6 +2,7 @@ const { Platform, Game } = require('../models');
 
 async function parsePlatformGamenameObjectIntoStrings(data) {
     const platformAndGameNames = [];
+    if (!data) return platformAndGameNames;
     const platformAndGameIds = Object.entries(data);
     for (let i = 0; i < platformAndGameIds.length; i++) {
         const platformId = platformAndGameIds[i][0];
