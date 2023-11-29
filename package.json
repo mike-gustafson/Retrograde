@@ -1,5 +1,5 @@
 {
-  "name": "RetroGrade",
+  "name": "retrograde",
   "version": "1.0.0",
   "description": "A retro video game collecting app",
   "main": "server.js",
