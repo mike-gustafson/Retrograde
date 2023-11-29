@@ -52,6 +52,15 @@ app.get('/', async (req, res) => {
   res.render('homepage', { platforms });
 })
 //-------------------------------------------------------------------------------------------------
+function sanitizeTitle(title) {
+  if (title) {
+    return title.replace(/[^\x00-\x7F]/g, ''); // This regex removes non-ASCII characters
+  } else {
+    title = 'unknown';
+    return title
+  }
+}
+
 async function fetchAndUpdateGames(offset) {
   try {
     let data = `fields *;limit 500; offset ${offset};sort id asc;`;
