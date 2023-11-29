@@ -94,7 +94,7 @@ const sanitizedGamesData = gamesData.map(game => ({
   version_title: sanitizeTitle(game.version_title),
 }));
     // Update the database with the fetched data
-    await Game.create(sanitizedGamesData);
+    await Game.bulkCreate(sanitizedGamesData);
 
 
 // Call the function recursively with the next offset after a 5-second pause
@@ -152,7 +152,7 @@ async function fetchAndUpdatePlatformLogos() {
     }));
 
     // Update the database with the fetched data
-    await PlatformLogo.create(sanitizedPlatformLogosData);
+    await PlatformLogo.bulkCreate(sanitizedPlatformLogosData);
 
     // Call the function recursively after a 5-second pause
     setTimeout(async () => {
