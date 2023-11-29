@@ -47,7 +47,7 @@ app.use('/games', require('./controllers/games'));
 app.use('/auth', require('./controllers/auth'));
 
 app.get('/', async (req, res) => {
-  // const platforms = await Platform.findAll();
+ const platforms = await Platform.findAll();
   res.render('homepage', { platforms });
 })
 
