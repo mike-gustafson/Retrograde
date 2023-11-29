@@ -187,8 +187,9 @@ console.log('Fetched '+platformsData.length+' platforms   xxxxxxxxxxxxxxxxxxxxxx
     }
 
     // Update the database with the fetched platform data
+    console.log('Updating platforms...');
     await Platform.bulkCreate(platformsData);
-
+console.log('Platforms updated   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     res.status(200).json({ message: 'Platform update complete.' });
   } catch (error) {
     console.error('Error updating platforms:', error);
