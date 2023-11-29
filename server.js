@@ -185,10 +185,14 @@ console.log('Fetched '+platformsData.length+' platforms   xxxxxxxxxxxxxxxxxxxxxx
       console.log('No more platforms to fetch.');
       return res.status(200).json({ message: 'No more platforms to fetch.' });
     }
-
+for (let i = 0; i < platformsData.length; i++) {
+  if platformsData[i].abbreviation === null {
+    platformsData[i].abbreviation = 'unknown';
+  }
     // Update the database with the fetched platform data
     console.log('Updating platforms...');
     await Platform.bulkCreate(platformsData);
+    
 console.log('Platforms updated   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     res.status(200).json({ message: 'Platform update complete.' });
   } catch (error) {
