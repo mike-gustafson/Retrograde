@@ -4,18 +4,20 @@ const { Platform, PlatformLogo, Game, User } = require('../models');
 const sortData = require('../utils/sort-data.util');
 const isLoggedIn = require('../middleware/isLoggedIn');
 
-router.get("/", async (req, res) => {
-    try {
-        const platforms = await Platform.findAll({
-            where: { category: [1, 5], },
-          });
-          const sortedPlatforms = sortData(platforms, 'alphaUp');
-          const platformLogos = await PlatformLogo.findAll();
-          res.render("platforms/index", { sortedPlatforms, platformLogos});
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+router.get("/", (req, res) => {
+  Platform.findAll({
+    where: { category: [1, 5] },
+  })
+    .then((platforms) => {
+      const sortedPlatforms = sortData(platforms, 'alphaUp');
+      return PlatformLogo.findAll().then((platformLogos) => {
+        res.render("platforms/index", { sortedPlatforms, platformLogos });
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 });
 
 router.get('/:platformId/games', async (req, res) => {
