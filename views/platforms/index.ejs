@@ -7,14 +7,11 @@
           <section class="text-white p-1" style="min-height: 60px;">
             <% let logoUrl='' %>
               <% if (platform.platformLogo) {
-                logoUrl=platformLogos.find(logo=> logo.id === platform.platformLogo)?.url.replace('jpg',
-                'png').replace('t_thumb', 't_720p')}%>
+                logoUrl=platformLogos.find(logo=> logo.id === platform.platformLogo)?.url }%>
                 <div class="d-flex align-items-center">
                     <% if (logoUrl) { %>
                       <img src="http:<%= logoUrl %>" alt="<%= platform.name %> Logo" class="img-fluid platform-logo"
                         style="max-width: 75px; max-height: 50px;">
-
-
                       <% } %>
                         <a href="/platforms/<%= platform.id %>">
                           <h6 class="card-title ms-2 text-center">
