@@ -49,13 +49,10 @@ router.get('/byId/:gameId', async (req, res) => {
       headers: headers,
       body: coverRaw,
     });
-
     if (!cover.ok) {
       throw new Error(`HTTP error! Status: ${cover.status}`);
     }
-
     const coverData = await cover.json();
-
     res.render('games/details', { game: game[0], cover: coverData[0] });
   } catch (error) {
     console.error(error);
