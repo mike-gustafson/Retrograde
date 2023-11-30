@@ -156,7 +156,7 @@ Track your collection, create top-10 lists, Share your wishlist with others, See
 | GET | /games | games.js | Gets all Games |
 | GET | /games/byId/:gameId | games.js | Fetches One Game |
 | POST | /games/add-to-collection | games.js | Adds a game to Users Collection |
-| POST | /games/remove-from-collection | games.js | Removes a game from Users Collection |
+| DELETE | /games/remove-from-collection | games.js | Removes a game from Users Collection |
 | POST | /games/add-to-wishlist | games.js | Adds a game to Users Wishlist |
 | POST | /games/remove-from-wishlist | games.js | Removes a game from Users Wishlist |
 | GET | /platforms | platforms.js | Gets all Systems |
@@ -165,6 +165,7 @@ Track your collection, create top-10 lists, Share your wishlist with others, See
 | GET | /profile | profiles.js | Regular User Profile |
 | GET | /profile/user | profiles.js | Get user info |
 | GET | /random-quote | random-quotes.js | Gets Random Quote for Homepage |
+| PUT | /profile/edit | profiles.js | Edit user profile details |
 
 ## `1` Fork & Clone Project & Install Dependencies
 `1` The first thing that we are going to do is `fork` and `clone`
