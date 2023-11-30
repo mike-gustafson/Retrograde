@@ -12,9 +12,10 @@
             %>
               <div class="d-flex align-items-center">
                 
-                <% if (logoUrl) { %>
                   <img src="http:<%= logoUrl %>" alt="<%= platform.name %> Logo" class="img-fluid platform-logo"
                     style="max-width: 75px; max-height: 50px;">
+                    
+                <% if (logoUrl) { %>
                 <% } %>
                 <a href="/platforms/<%= platform.id %>">
                 <h6 class="card-title ms-2 text-center">
