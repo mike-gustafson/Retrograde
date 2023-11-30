@@ -4,8 +4,6 @@
       <div class="col mb-1">
         <div class=" p-1 h-100">
           <section class="text-white p-1" style="min-height: 60px;">
-            <% let test='this is a test' %>
-            <%= platformLogos.find(logo=> logo.id === platform.platformLogo)?.url %><%= test %>
             <% let logoUrl=(platformLogos.find(logo=> logo.id === platform.platformLogo)?.url.replace('jpg',
               'png').replace('t_thumb', 't_720p') || '//techterms.com/img/sm/cd_290.png')%>
               <div class="d-flex align-items-center">
@@ -22,6 +20,6 @@
           </section>
         </div>
       </div>
-      <% }) %>
+    <% }); %>
   </div>
 </div>
