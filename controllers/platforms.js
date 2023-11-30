@@ -11,7 +11,6 @@ router.get("/", async (req, res) => {
           });
           const sortedPlatforms = sortData(platforms, 'alphaUp');
           const platformLogos = await PlatformLogo.findAll();
-          console.log(platformLogos,'platformLogos')
           res.render("platforms/index", { sortedPlatforms, platformLogos});
     } catch (err) {
         console.error(err);
