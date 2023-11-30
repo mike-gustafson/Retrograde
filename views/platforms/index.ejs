@@ -8,6 +8,7 @@
             if ((platform.category===1 || platform.category===5) && platform.platformLogo) { 
                 logoUrl=platformLogos.find(logo=> logo.id ===
                 platform.platformLogo)?.url.replace('jpg', 'png').replace('t_thumb', 't_720p');
+                console.log(logoUrl);
             }
             %>
               <div class="d-flex align-items-center">
