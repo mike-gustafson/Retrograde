@@ -215,7 +215,7 @@ npm install
 }
 ```
 
-`2` Create database `express_auth_dev`
+`2` Create database `retrograde`
 
 ```text
 sequelize db:create
