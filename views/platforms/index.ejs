@@ -4,16 +4,10 @@
       <div class="col mb-1">
         <div class=" p-1 h-100">
           <section class="text-white p-1" style="min-height: 60px;">
-            <% let logoUrl=''; 
-            if ((platform.category===1 || platform.category===5) && platform.platformLogo) { 
-                logoUrl=platformLogos.find(logo=> logo.id ===
-                platform.platformLogo)?.url.replace('jpg', 'png').replace('t_thumb', 't_720p');
-                
-            }
-            %>
-            <%= logoUrl %> is logourl
+            <% let logoUrl='' %> 
+            <% if ((platform.category===1 || platform.category===5) && platform.platformLogo) { logoUrl=platformLogos.find(logo=> logo.id === platform.platformLogo)?.url.replace('jpg', 'png').replace('t_thumb', 't_720p')}%>
               <div class="d-flex align-items-center">
-                
+            <%= logoUrl %> is logourl    
                   <img src="http:<%= logoUrl %>" alt="<%= platform.name %> Logo" class="img-fluid platform-logo"
                     style="max-width: 75px; max-height: 50px;">
                     
@@ -31,3 +25,12 @@
     <% }) %>
   </div>
 </div>
+
+<script>
+  function getLogoUrl(platform) {
+    if (platform.category === 1 || platform.category === 5) {
+      return platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg', 'png').replace('t_thumb', 't_720p');
+    }
+    return '';
+  }
+</script>
