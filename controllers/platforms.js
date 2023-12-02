@@ -4,7 +4,7 @@ const { Platform, PlatformLogo, Game, User } = require('../models');
 const sortData = require('../utils/sort-data.util');
 const isLoggedIn = require('../middleware/isLoggedIn');
 
-function generatePlatformHTML(platform, platformLogos) {
+async function generatePlatformHTML(platform, platformLogos) {
   const logoUrl = (platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg',
     'png').replace('t_thumb', 't_720p') || '//techterms.com/img/sm/cd_290.png');
 
@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
           const sortedPlatforms = sortData(platforms, 'alphaUp');
           const platformLogos = await PlatformLogo.findAll();
 
-          const platformHTML = sortedPlatforms.map(platform => generatePlatformHTML(platform, platformLogos)).join('');
+          const platformHTML = await sortedPlatforms.map(platform => generatePlatformHTML(platform, platformLogos)).join('');
 
           res.render("platforms/index", { platformHTML});
     } catch (err) {
