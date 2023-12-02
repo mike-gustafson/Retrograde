@@ -32,15 +32,20 @@ async function generatePlatformHTML(platform, platformLogos) {
 
 router.get("/", async (req, res) => {
     try {  
-      const platforms = await Platform.findAll({
+      const platformsPromise = await Platform.findAll({
             where: { category: [1, 5], },
           });
-          const sortedPlatforms = sortData(platforms, 'alphaUp');
-          const platformLogos = await PlatformLogo.findAll();
+      const platformLogosPromise = await PlatformLogo.findAll();
+      
+      const [platforms, platformLogos] = await Promise.all([platformsPromise, platformLogosPromise]);
+      
+      const sortedPlatforms = sortData(platforms, 'alphaUp');
+      const platformHTMLPromises = sortedPlatforms.map(platform => generatePlatformHTML(platform, platformLogos));
 
-          const platformHTML = await sortedPlatforms.map(platform => generatePlatformHTML(platform, platformLogos)).join('');
-
-          res.render("platforms/index", { platformHTML});
+      const platformHTMLArray = await Promise.all(platformHTMLPromises);
+  
+      const platformHTML = platformHTMLArray.join('');
+      res.render("platforms/index", { platformHTML});
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
