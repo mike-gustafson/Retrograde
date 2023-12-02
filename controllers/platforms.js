@@ -50,6 +50,7 @@ router.get("/", async (req, res) => {
       const platformLogosPromise = await PlatformLogo.findAll();
       
       const [platforms, platformLogos] = await Promise.all([platformsPromise, platformLogosPromise]);
+      console.log(platforms)
       const sortedPlatforms = sortData(platforms, 'alphaUp');
       const platformHTMLPromises = sortedPlatforms.map(platform => generatePlatformHTML(platform, platformLogos));
       const platformHTMLArray = await Promise.all(platformHTMLPromises);
