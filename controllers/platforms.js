@@ -7,7 +7,7 @@ const isLoggedIn = require('../middleware/isLoggedIn');
 async function generatePlatformHTML(platform, platformLogos) {
   const logoUrl = (platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg',
     'png').replace('t_thumb', 't_720p') || '//techterms.com/img/sm/cd_290.png');
-
+console.log(logoUrl);
   return `
     <div class="col mb-1">
       <div class="p-1 h-100">
@@ -38,7 +38,6 @@ router.get("/", async (req, res) => {
       const platformLogosPromise = await PlatformLogo.findAll();
       
       const [platforms, platformLogos] = await Promise.all([platformsPromise, platformLogosPromise]);
-      console.log(platformLogos)
       const sortedPlatforms = sortData(platforms, 'alphaUp');
       const platformHTMLPromises = sortedPlatforms.map(platform => generatePlatformHTML(platform, platformLogos));
       const platformHTMLArray = await Promise.all(platformHTMLPromises);
