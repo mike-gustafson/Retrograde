@@ -158,18 +158,8 @@ app.get('/updatePlatforms', async (req, res) => {
   try {
     let data = `fields *;limit 500;sort id asc;`;
 
-    const response = await axios.post(
-      'https://api.igdb.com/v4/platforms', 
-      data,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Client-ID': 'mtos002sejiyk8rra7wr9i0cjeq4fk',
-          'Authorization': 'Bearer k54046h0mmd74wexbb3r2kmr6aatah',
-        },
-      }
-    );
-
+    const response = await axios.post('https://api.igdb.com/v4/platforms', data, { headers: headers });
+console.log(response.data)
     const platformsData = response.data;
     if (platformsData.length ===0) {
       console.log('No more platforms to fetch.');
@@ -179,7 +169,7 @@ app.get('/updatePlatforms', async (req, res) => {
     const sanitizedPlatformsData = platformsData.map(platform => ({
       ...platform,
       summary: sanitizeTitle(platform.summary),
-      platformLoggo: platform.platform_logo,
+      platformLogo: platform.platform_logo,
     }));
 
     await Platform.bulkCreate(sanitizedPlatformsData);
