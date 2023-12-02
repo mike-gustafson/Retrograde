@@ -156,14 +156,22 @@ async function fetchAndUpdatePlatformLogos() {
 
 app.get('/updatePlatforms', async (req, res) => {
   try {
-    const response = await fetch('https://api.igdb.com/v4/platforms', {
-      method: 'post',
-      headers: headers,
-      body: 'fields *; limit 500; sort id asc;',
-    });
-    console.log(response)
+    let data = `fields *;limit 500;sort id asc;`;
+
+    const response = await axios.post(
+      'https://api.igdb.com/v4/platforms', 
+      data,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Client-ID': 'mtos002sejiyk8rra7wr9i0cjeq4fk',
+          'Authorization': 'Bearer k54046h0mmd74wexbb3r2kmr6aatah',
+        },
+      }
+    );
+
     const platformsData = response.data;
-    if (!platformsData) {
+    if (platformsData.length ===0) {
       console.log('No more platforms to fetch.');
       return res.status(200).json({ message: 'No more platforms to fetch.' });
     }
