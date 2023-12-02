@@ -179,6 +179,7 @@ app.get('/updatePlatforms', async (req, res) => {
     const sanitizedPlatformsData = platformsData.map(platform => ({
       ...platform,
       summary: sanitizeTitle(platform.summary),
+      platformLoggo: platform.platform_logo,
     }));
 
     await Platform.bulkCreate(sanitizedPlatformsData);
