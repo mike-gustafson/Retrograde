@@ -7,7 +7,8 @@ const isLoggedIn = require('../middleware/isLoggedIn');
 async function generatePlatformHTML(platform, platformLogos) {
   const logoUrl = (platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg',
     'png').replace('t_thumb', 't_720p') || '//techterms.com/img/sm/cd_290.png');
-console.log(logoUrl);
+console.log(platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg',
+'png').replace('t_thumb', 't_720p'));
   return `
     <div class="col mb-1">
       <div class="p-1 h-100">
