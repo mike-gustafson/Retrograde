@@ -54,7 +54,7 @@ app.use('/games', require('./controllers/games'));
 app.use('/auth', require('./controllers/auth'));
 
 app.get('/', async (req, res) => {
- const platforms = await Platform.findAll();
+  const platforms = await Platform.findAll();
   res.render('homepage', { platforms });
 })
 //-------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ function sanitizeTitle(title) {
 async function fetchAndUpdateGames(offset) {
   try {
     let data = `fields *;limit 500; offset ${offset};sort id asc;`;
-console.log('Fetched '+offset+' games   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    console.log('Fetched ' + offset + ' games   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     const response = await axios.post(
       'https://api.igdb.com/v4/games',
       data,
@@ -86,34 +86,26 @@ console.log('Fetched '+offset+' games   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 
     const gamesData = response.data;
 
-    // If data is empty, stop the recursion
     if (gamesData.length === 0) {
       console.log('No more data to fetch.');
       return;
     }
-// Apply sanitizeTitle function to each game name
-const sanitizedGamesData = gamesData.map(game => ({
-  ...game,
-  name: sanitizeTitle(game.name),
-  summary: sanitizeTitle(game.summary),
-  slug: sanitizeTitle(game.slug),
-  version_title: sanitizeTitle(game.version_title),
-}));
-    // Update the database with the fetched data
+    const sanitizedGamesData = gamesData.map(game => ({
+      ...game,
+      name: sanitizeTitle(game.name),
+      summary: sanitizeTitle(game.summary),
+      slug: sanitizeTitle(game.slug),
+      version_title: sanitizeTitle(game.version_title),
+    }));
     await Game.bulkCreate(sanitizedGamesData);
-
-
-// Call the function recursively with the next offset after a 5-second pause
-setTimeout(async () => {
-
-  await fetchAndUpdateGames(offset + 500);
-}, 5000);
+    setTimeout(async () => {
+      await fetchAndUpdateGames(offset + 500);
+    }, 5000);
   } catch (error) {
     console.error('Error fetching and updating data:', error);
   }
 }
 
-// Endpoint to initiate the data fetching and updating process
 app.get('/updateGames', async (req, res) => {
   try {
     // Start the process with offset 0
@@ -142,25 +134,16 @@ async function fetchAndUpdatePlatformLogos() {
         },
       }
     );
-
     const platformLogosData = response.data;
-
-    // If data is empty, stop the process
     if (platformLogosData.length === 0) {
       console.log('No more platform logos to fetch.');
       return;
     }
-
-    // Apply sanitizeTitle function to each platform logo's url
     const sanitizedPlatformLogosData = platformLogosData.map(platformLogo => ({
       ...platformLogo,
       url: sanitizeTitle(platformLogo.url),
     }));
-
-    // Update the database with the fetched data
     await PlatformLogo.bulkCreate(sanitizedPlatformLogosData);
-
-    // Call the function recursively after a 5-second pause
     setTimeout(async () => {
       await fetchAndUpdatePlatformLogos();
     }, 5000);

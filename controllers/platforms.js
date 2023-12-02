@@ -4,6 +4,32 @@ const { Platform, PlatformLogo, Game, User } = require('../models');
 const sortData = require('../utils/sort-data.util');
 const isLoggedIn = require('../middleware/isLoggedIn');
 
+function generatePlatformHTML(platform, platformLogos) {
+  const logoUrl = (platformLogos.find(logo => logo.id === platform.platformLogo)?.url.replace('jpg',
+    'png').replace('t_thumb', 't_720p') || '//techterms.com/img/sm/cd_290.png');
+
+  return `
+    <div class="col mb-1">
+      <div class="p-1 h-100">
+        <section class="text-white p-1" style="min-height: 60px;">
+          <div class="d-flex align-items-center">
+            ${logoUrl ? `
+              <img src="http:${logoUrl}" alt="${platform.name} Logo" class="img-fluid platform-logo"
+                style="max-width: 75px; max-height: 50px;">
+            ` : ''}
+            <a href="/platforms/${platform.id}">
+              <h6 class="card-title ms-2 text-center">
+                ${platform.name}
+              </h6>
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  `;
+}
+
+
 router.get("/", async (req, res) => {
     try {  
       const platforms = await Platform.findAll({
@@ -11,8 +37,10 @@ router.get("/", async (req, res) => {
           });
           const sortedPlatforms = sortData(platforms, 'alphaUp');
           const platformLogos = await PlatformLogo.findAll();
-        
-          res.render("platforms/index", { sortedPlatforms, platformLogos});
+
+          const platformHTML = sortedPlatforms.map(platform => generatePlatformHTML(platform, platformLogos)).join('');
+
+          res.render("platforms/index", { platformHTML});
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
