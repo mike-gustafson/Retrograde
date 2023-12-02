@@ -61,6 +61,7 @@ app.get('/', async (req, res) => {
 
 function sanitizeTitle(title) {
   if (title) {
+    console.log(title.replace(/[^\x00-\x7F]/g, '')) // This regex removes non-ASCII characters
     return title.replace(/[^\x00-\x7F]/g, ''); // This regex removes non-ASCII characters
   } else {
     title = 'unknown';
@@ -143,6 +144,7 @@ async function fetchAndUpdatePlatformLogos() {
       ...platformLogo,
       url: sanitizeTitle(platformLogo.url),
     }));
+    
     await PlatformLogo.bulkCreate(sanitizedPlatformLogosData);
     setTimeout(async () => {
       await fetchAndUpdatePlatformLogos();
@@ -159,6 +161,7 @@ app.get('/updatePlatforms', async (req, res) => {
       headers: headers,
       body: 'fields *; limit 500; sort id asc;',
     });
+    console.log(response)
     const platformsData = response.data;
     if (!platformsData) {
       console.log('No more platforms to fetch.');
