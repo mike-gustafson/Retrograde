@@ -175,7 +175,13 @@ app.get('/updatePlatforms', async (req, res) => {
       console.log('No more platforms to fetch.');
       return res.status(200).json({ message: 'No more platforms to fetch.' });
     }
-    await Platform.bulkCreate(platformsData);
+
+    const sanitizedPlatformsData = platformsData.map(platform => ({
+      ...platform,
+      summary: sanitizeTitle(platform.summary),
+    }));
+
+    await Platform.bulkCreate(sanitizedPlatformsData);
     res.status(200).json({ message: 'Platform update complete.' });
   } catch (error) {
     console.error('Error updating platforms:', error);
