@@ -104,7 +104,7 @@ async function fetchAndUpdateGames(offset) {
     }, 5000);
   } catch (error) {
     console.error('Error fetching and updating data:', error);
-  }
+  } 
 }
 
 app.get('/updateGames', async (req, res) => {

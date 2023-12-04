@@ -1,56 +1,57 @@
+
+
 <div class="card p-0 text-white">
   <section class="p-1">
     <h1>Games for <%= platform.name %> (<%= games.length %> games)</h1>
   </section>
 </div>
+
 <div style="overflow-y: auto; max-height: 75vh;">
   <div class="card p-1 text-white">
     <section>
-      <table style="width:100%; table-layout: fixed;">
-        <col style="width:60%"><col style="width:15%"><col style="width:15%"><col style="width:10%">
-        <thead>
-          <tr>
-            <th style="text-align:center">Name</th>
-            <th style="text-align:center">Copies Owned</th>
-            <th style="text-align:center">Wishlist</th>
-            <th style="text-align:center">Do Not Want</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% games.forEach(game=> { %>
-            <tr style="border-bottom: 1px solid aqua;" id="<%= game.id %>">
-              <td style="width: 75%">
-                <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
-                  <%= game.name %>
-                </a>
-              </td>
-              <td id="copies-owned-<%= platform.id %>-<%= game.id %>" class="copies-owned-column">
-                <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
-                  <% let copyCount=1; %>
-                  <% copyCount = user.games_owned[platform.id].filter(id=> id === game.id).length %>
-                  <%= copyCount %> owned 
-                  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">+1</button>
-                  <button onclick="removeFromCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">-1</button>
-                  <% } else { %>
-                  <% let copyCount=0; %>
-                  <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">Add to Collection</button>
-                <% } %>
-              </td>
-              <td>
-                <% if (user && user.games_wishlist && user.games_wishlist[platform.id] && user.games_wishlist[platform.id].includes(game.id)) { %>
-                  <button id="wishlist-button-<%= game.id %>" onclick="removeFromWishlist(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Remove Wishlist</button>
-                <% } else { %>
-                  <button id="wishlist-button-<%= game.id %>" onclick="addToWishlist(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Add to Wishlist</button>
-                <% } %>
-              </td>
-              <td></td> 
+      <div class="table-responsive">
+        <table class="table-dark table-bordered" style="width: 100%;">
+          <thead>
+            <tr>
+              <th style="text-align:center">Name</th>
+              <th style="text-align:center">Copies Owned</th>
+              <th style="text-align:center">Wishlist</th>
             </tr>
+          </thead>
+          <tbody>
+            <% games.forEach(game => { %>
+              <tr style="border-bottom: 1px solid aqua;" id="<%= game.id %>">
+                <td>
+                  <a href="/games/byId/<%= game.id %>/?_method=PUT" method="POST">
+                    <%= game.name %>
+                  </a>
+                </td>
+                <td id="copies-owned-<%=platform.id%>-<%=game.id%>" style="text-align:center">
+                  <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
+                    <% let copyCount = user.games_owned[platform.id].filter(id => id === game.id).length %>
+                    <%= copyCount %> owned 
+                    <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">+1</button>
+                    <button onclick="removeFromCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">-1</button>
+                  <% } else { %>
+                    <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, 0)">Add to Collection</button>
+                  <% } %>
+                </td>
+                <td style="text-align:center">
+                  <% if (user && user.games_wishlist && user.games_wishlist[platform.id] && user.games_wishlist[platform.id].includes(game.id)) { %>
+                    <button id="wishlist-button-<%= game.id %>" onclick="removeFromWishlist(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Remove Wishlist</button>
+                  <% } else { %>
+                    <button id="wishlist-button-<%= game.id %>" onclick="addToWishlist(<%= user.id %>, <%= game.id %>, <%= platform.id %>)">Add to Wishlist</button>
+                  <% } %>
+                </td>
+              </tr>
             <% }); %>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </section>
   </div>
 </div>
+
 
 <script>
   async function addToCollection(userId, gameId, platformId, copyCount) {
@@ -132,7 +133,7 @@ function updateCopiesOwnedCell(userId, platformId, gameId, copyCount) {
   async function removeFromWishlist(userId, gameId, platformId) {
   try {
     const response = await fetch('/games/remove-from-wishlist', {
-      method: 'DELETE', // Change the method to DELETE
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, gameId, platformId }),
     });

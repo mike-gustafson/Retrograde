@@ -3,6 +3,8 @@ const router = express.Router();
 const { Platform, PlatformLogo, Game, User } = require('../models');
 const sortData = require('../utils/sort-data.util');
 const isLoggedIn = require('../middleware/isLoggedIn');
+const { Op } = require('sequelize');
+
 
 async function generatePlatformHTML(platform, platformLogos) {
     try {
@@ -74,7 +76,7 @@ router.get('/:platformId/games', async (req, res) => {
     }
     const games = await Game.findAll({
       where: {
-        platforms: [platformId,],
+        platforms: [platformId],
         category: 0,
       },
     });
@@ -101,8 +103,10 @@ router.get('/:platformId', isLoggedIn, async (req, res) => {
         });
         const games = await Game.findAll({
           where: {
-            platforms: [platformId],
-            category: 0,
+            platforms: {
+              [Op.contains]: [platformId],
+            },            
+            category: [0, 10, 11, 3, 8, 13, 2, 1, 4] ,
           },
         });
         const sortedGames = sortData(games, 'alphaUp');

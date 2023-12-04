@@ -14,9 +14,9 @@
                     <% } %>
                 </section>
                 <section class="text-white p-1" >
-                    System type: <% let platformCategory;if (platform.category === 1) {platformCategory = 'Console';} else if (platform.category === 5) {platformCategory = 'Handheld';}%><br>
-                    <%= platformCategory %><%= platform.name %> (<%= platform.alternativeName %>)
-                    Generation: <%= platform.generation %><br>
+                    <p><%= platform.name %> (<%= platform.alternativeName %>)</p>
+                    <p>System type: <% let platformCategory;if (platform.category === 1) {platformCategory = 'Console';} else if (platform.category === 5) {platformCategory = 'Handheld';}%> <%= platformCategory %></p> 
+                    <p>Generation: <%= platform.generation %><br></p>
                 </section>
             </div>
         </div>
