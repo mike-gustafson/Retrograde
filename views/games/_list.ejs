@@ -30,10 +30,10 @@
                   <% if (user && user.games_owned && user.games_owned[platform.id] && user.games_owned[platform.id].includes(game.id)) { %>
                     <% let copyCount = user.games_owned[platform.id].filter(id => id === game.id).length %>
                     <%= copyCount %> owned 
-                    <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">+1</button>
-                    <button onclick="removeFromCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">-1</button>
+                    <button class="p-0" onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">+1</button>
+                    <button class="p-0" onclick="removeFromCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, <%= copyCount %>)">-1</button>
                   <% } else { %>
-                    <button onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, 0)">Add to Collection</button>
+                    <button class="p-0" onclick="addToCollection(<%= user.id %>, <%= game.id %>, <%= platform.id %>, 0)">Add to Collection</button>
                   <% } %>
                 </td>
                 <td style="text-align:center">
